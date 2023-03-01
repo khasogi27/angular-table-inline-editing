@@ -1,0 +1,42 @@
+<div class="table-responsive">
+  <table
+    #table
+    class="table table-vcenter table-nowrap table-bordered">
+    <thead class="custom-thead">
+      <tr>
+        <th class="bg-transparent w-1"></th>
+        <ng-container *ngFor="let fld of fieldType">
+          <th class="bg-transparent" [innerHTML]="fld.name"></th>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody class="border border-1 bg-white rounded-0">
+      <tr #evnTr
+        *ngFor="let item of dataSource; let i = index"
+        (click)="onClickTable($event, item, i)">
+        <td role="button" class="overflow-hidden p-0">
+          <div ngbDropdown container="body">
+            <span [innerHTML]="onFilterIcon(evnTr) | saveSvg" ngbDropdownToggle></span>
+            <div ngbDropdownMenu>
+              <ng-container *ngFor="let dd of dsDropdown">
+                <button ngbDropdownItem 
+                  (click)="onClickDropdown(evnTr, dd.action, item)">
+                  <span class="me-2" [innerHTML]="dd.icon | saveSvg"></span>
+                  {{ dd.name | titlecase }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </td>
+        <ng-container *ngFor="let fld of fieldType">
+          <td #evnTd class="custom-td"
+            (click)="onClickTableTd($event, item)"
+            [innerHTML]="onFilterTbody(evnTr, evnTd, fld, item)"
+            (mouseenter)="mouseHover($event)"
+            (mouseleave)="mouseHover($event)"
+          ></td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,41 @@
+.selected {
+  background-color: whitesmoke;
+}
+
+.border-inline {
+  border-bottom: 2px solid #206bc4;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+}
+
+.border-outline {
+  border-bottom: 2px solid rgb(0, 0, 0);
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+}
+
+.table thead th {
+  font-size: small;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.dropdown-menu {
+  border-radius: 0;
+}
+
+.custom-thead {
+  border: none;
+  border-color: transparent;
+  border-bottom: inherit;
+}
+
+.custom-td {
+  padding: 0.55rem 0.55rem !important;
+}

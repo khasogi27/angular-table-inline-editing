@@ -1,0 +1,47 @@
+<div class="{{ tableType == 'border' ? 'card' : '' }}">
+  <div class="d-flex w-100 overflow-auto">
+    <ng-container *ngFor="let nv of toolbar; let i = index">
+      <button
+        class="btn border-0 shadow-none text-info m-1 
+        {{ i != toolbar.length - 1 ? 'pe-0' : '' }}"
+        (click)="onNavClick(nv.icons.name)"
+        [disabled]="nv.disabled"
+      >
+        <span [innerHTML]="nv.icons.svg | saveSvg"></span>
+        <span [innerHTML]="nv.icons.name | titlecase"></span>
+      </button>
+    </ng-container>
+  </div>
+  <div class="table-responsive">
+    <table
+      #table
+      class="table table-vcenter table-nowrap 
+      {{ isHover ? 'table-hover' : '' }}"
+    >
+      <thead class="{{ tableType == 'border' ? 'border-top' : '' }}">
+        <tr>
+          <ng-container *ngFor="let fld of fieldType">
+            <th class="bg-transparent" [innerHTML]="fld.name"></th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of dataSource; let i = index"
+          [class.selected]="i == highlightRow"
+          (dblclick)="onDclickTable($event, item)"
+          (click)="onClickTable($event, item, i)"
+        >
+          <ng-container *ngFor="let fld of fieldType">
+            <td
+              #evn
+              [innerHTML]="onFilterTbody(evn, fld, item)"
+              (mouseenter)="mouseHover($event)"
+              (mouseleave)="mouseHover($event)"
+            ></td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

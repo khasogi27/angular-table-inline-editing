@@ -1,0 +1,108 @@
+<div class="table-responsive">
+  <table #table class="table table-vcenter table-nowrap table-bordered">
+    <thead class="custom-thead">
+      <tr>
+        <th class="bg-transparent w-1"></th>
+        <ng-container *ngFor="let fld of fieldType">
+          <th class="bg-transparent" [innerHTML]="fld.name"></th>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody #tbodyView class="border border-1 bg-white rounded-0">
+      <tr
+        #trView
+        *ngFor="let item of dataSource; let i = index; trackBy: onTrackDs"
+      >
+        <td role="button" class="overflow-hidden p-0">
+          <div ngbDropdown container="body">
+            <span
+              *ngIf="!showEditor"
+              [innerHTML]="onFilterIcon() | saveSvg"
+              ngbDropdownToggle
+            >
+            </span>
+            <div ngbDropdownMenu>
+              <ng-container *ngFor="let dd of dsDropdown">
+                <button
+                  ngbDropdownItem
+                  (click)="onDropdownClick(trView, dd.action, item)"
+                >
+                  <span class="me-2" [innerHTML]="dd.icon | saveSvg"></span>
+                  {{ dd.name | titlecase }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </td>
+        <ng-container *ngFor="let fld of fieldType">
+          <td
+            #tdView
+            class="custom-td"
+            [innerHTML]="onFilterTbody(tdView, fld, item)"
+          ></td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<table class="d-none">
+  <thead></thead>
+  <tbody #tbodyEditor>
+    <tr #trEditor [hidden]="!showEditor">
+      <td role="button" class="overflow-hidden p-0">
+        <div ngbDropdown container="body">
+          <span [innerHTML]="dsIcon.arrowRight | saveSvg"></span>
+        </div>
+      </td>
+      <ng-container *ngFor="let fld of fieldType">
+        <td [formGroup]="form" class="py-0">
+          <input
+            *ngIf="fld.type == 'input'"
+            type="text"
+            class="form-control rounded-0 border-outline"
+            formControlName="{{ fld.name }}"
+            autofocus
+          />
+          <input
+            *ngIf="fld.type == 'checkbox'"
+            type="checkbox"
+            class="rounded-0 border-outline"
+            formControlName="{{ fld.name }}"
+          />
+          <select
+            *ngIf="fld.type == 'select'"
+            class="form-select"
+            formControlName="{{ fld.name }}"
+          >
+            <ng-container *ngFor="let opt of selectOption">
+              <option value="{{ opt.value }}">{{ opt.name }}</option>
+            </ng-container>
+          </select>
+          <div
+            *ngIf="fld.type == 'lookup'"
+            class="d-inline-block"
+            ngbDropdown
+            #myDrop="ngbDropdown"
+          >
+            <input
+              type="text"
+              class="form-control rounded-0 border-outline"
+              formControlName="{{ fld.name }}"
+              (keyup)="onKeyup($event)"
+              (keyup)="myDrop.open()"
+              ngbDropdownToggle
+            />
+            <div ngbDropdownMenu>
+              <ng-container *ngFor="let opt of lookupOption">
+                <button (click)="onClickLookup(opt, fld.name)" ngbDropdownItem>
+                  {{ opt.name }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+    </tr>
+  </tbody>
+</table>

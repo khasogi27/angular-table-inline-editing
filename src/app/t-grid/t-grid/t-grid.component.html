@@ -1,0 +1,43 @@
+<div class="card">
+  <div class="d-flex w-100 overflow-auto">
+    <ng-container *ngFor="let nv of toolbar; let i = index">
+      <button
+        class="btn border-0 shadow-none text-info m-1 
+        {{ i != toolbar.length - 1 ? 'pe-0' : '' }}"
+        (click)="onNavClick(nv.icons.name)"
+        [disabled]="nv.disabled"
+      >
+        <span [innerHTML]="nv.icons.svg | saveSvg"></span>
+        <span [innerHTML]="nv.icons.name | titlecase"></span>
+      </button>
+    </ng-container>
+  </div>
+  <div class="table-responsive">
+    <table #table
+      class="table table-vcenter table-nowrap 
+      {{ isHover ? 'table-hover' : '' }}">
+      <thead class="border-top">
+        <tr>
+          <ng-container *ngFor="let fld of fieldType">
+            <th class="bg-transparent" [innerHTML]="fld.name"></th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody #evnTb>
+        <tr #evnTr 
+          *ngFor="let item of dataSource; let i = index"
+          (click)="onClickTable($event, evnTb, evnTr, item)"
+          >
+          <ng-container *ngFor="let fld of fieldType">
+            <td
+              #evnTd
+              [innerHTML]="onFilterTbody(evnTr, evnTd, fld, item)"
+              (mouseenter)="mouseHover($event)"
+              (mouseleave)="mouseHover($event)"
+            ></td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

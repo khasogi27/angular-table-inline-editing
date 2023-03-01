@@ -1,0 +1,42 @@
+<div class="table-responsive">
+  <table class="table table-vcenter table-nowrap table-hover">
+    <thead>
+      <tr>
+        <th class="bg-transparent w-1"></th>
+        <ng-container *ngFor="let ft of fieldType">
+          <th class="bg-transparent">{{ ft.name }}</th>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of dataSource" (click)="onClickTable(item)">
+        <td role="button" class="overflow-hidden p-0">
+          <div ngbDropdown container="body">
+            <span [innerHTML]="dsIcon.moreVert | saveSvg" 
+            ngbDropdownToggle></span>
+            <div ngbDropdownMenu>
+              <button ngbDropdownItem>
+                <span class="me-2" [innerHTML]="dsIcon.add | saveSvg"></span>
+                Add Line
+              </button>
+              <button ngbDropdownItem>
+                <span class="me-2" [innerHTML]="dsIcon.edit | saveSvg"></span>
+                Edit Line
+              </button>
+              <div class="dropdown-divider"></div>
+              <button ngbDropdownItem>
+                <span class="me-2" [innerHTML]="dsIcon.delete | saveSvg"></span>
+                Delete Line
+                </button>
+            </div>
+          </div>
+        </td>
+        <ng-container *ngFor="let ft of fieldType">
+          <td [innerHTML]="onFilterTbody(ft, item)"></td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- [innerHTML]="dsIcon.moreVert | saveSvg"  -->
