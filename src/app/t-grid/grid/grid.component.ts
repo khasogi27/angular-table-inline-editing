@@ -6,6 +6,7 @@ import {
   ElementRef,
   ViewChild,
   HostListener,
+  Output,
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -36,7 +37,7 @@ export interface FieldType {
   param?: any;
 }
 
-interface LocalSource {
+interface tableValue {
   action: string;
   data: any[];
 }
@@ -56,8 +57,8 @@ export class GridComponent implements OnInit {
   @Input() fieldType: FieldType[] = [];
 
   private keyId!: string;
-  private localSource: { action: string; data: any[] }[] = [];
-  public newData$: any = new Subject<LocalSource[]>();
+  public tableValue: { action: string; data: any[] }[] = [];
+  public newData$: any = new Subject<tableValue>();
   public dsIcon: any = TablerIcon;
   public selectOption: SelectOption[] = [];
   public lookupOption: LookupOption[] = [];
@@ -220,7 +221,8 @@ export class GridComponent implements OnInit {
       this.form.reset();
       this.showEditor = true;
       this.rowIdx = event.tr.rowIndex;
-      this.form.patchValue(this.dataSource[this.rowIdx - 1]);
+      const dataVal = this.dataSource[this.rowIdx - 1];
+      this.form.patchValue(dataVal);
       this.rd.insertBefore(
         this.tbodyView.nativeElement,
         this.trEditor.nativeElement,
@@ -232,6 +234,7 @@ export class GridComponent implements OnInit {
       this.showEditor = false;
       let formVal = this.form.value;
       formVal['isEdit'] = false;
+      this.newData$.next({ action: this.statusAction, data: formVal });
       if (this.statusAction == 'add') {
         this.dataSource.push(formVal);
       } else {
@@ -241,15 +244,20 @@ export class GridComponent implements OnInit {
         this.tbodyEditor.nativeElement,
         this.trEditor.nativeElement
       );
-      this.localSource.push({ action: this.statusAction, data: formVal });
-      this.newData$.next(this.localSource);
+      this.tableValue.push({ action: this.statusAction, data: formVal });
       this.statusAction = action;
     } else if (action == 'delete') {
+      this.rowIdx = event.tr.rowIndex;
+      const dataVal = this.dataSource[this.rowIdx - 1];
+      this.dataSource.find((ds, idx) => {
+        ds == dataVal ? this.dataSource.splice(idx, 1) : '';
+      });
+      this.tableValue.push({ action: action, data: dataVal });
     } else if (action == 'cancel') {
       this.showEditor = false;
       if (this.rowIdx > 1) {
-        this.dataSource[this.rowIdx - 1]['isEdit'] =
-          !this.dataSource[this.rowIdx - 1]['isEdit'];
+        let dataVal = this.dataSource[this.rowIdx - 1];
+        dataVal['isEdit'] = !dataVal['isEdit'];
       }
       this.rd.appendChild(
         this.tbodyEditor.nativeElement,

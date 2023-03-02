@@ -119,9 +119,10 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {}
 
   onSaveClick() {
-    this.grid.newData$.subscribe((e) => {
-      console.log(e, '<<< event');
-      // this.grid.newData$.complete();
-    });
+    console.log(this.grid.tableValue, '<<<');
+    // this.grid.newData$.subscribe((e) => {
+    //   console.log(e, '<<< event');
+    //   // this.grid.newData$.complete();
+    // });
   }
 }
