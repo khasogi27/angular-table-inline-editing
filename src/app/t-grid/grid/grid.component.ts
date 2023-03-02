@@ -13,12 +13,18 @@ import { TablerIcon } from '../icons';
 
 export interface SelectOption {
   name: string;
-  value: string;
+  data: {
+    name: string;
+    value: string;
+  }[];
 }
 
 export interface LookupOption {
   name: string;
-  value: string;
+  data: {
+    name: string;
+    value: string;
+  }[];
 }
 
 export interface FieldType {
@@ -118,8 +124,19 @@ export class GridComponent implements OnInit {
   onFilterTbody(evnTd: any, field: any, data: any) {
     if (field.type == 'select') {
       for (let opt of this.selectOption) {
-        if (opt.name == data[field.name]) {
-          return opt.name;
+        for (let op of opt.data) {
+          if (op.value == data[field.name]) {
+            return op.name;
+          }
+        }
+      }
+    }
+    if (field.type == 'lookup') {
+      for (let opt of this.lookupOption) {
+        for (let op of opt.data) {
+          if (op.value == data[field.name]) {
+            return op.name;
+          }
         }
       }
     }
@@ -153,25 +170,32 @@ export class GridComponent implements OnInit {
     this.onNavClick(action, { tr: evnTr });
   }
 
-  onKeyup(e: any) {
+  onKeyup(e: any, dsFld: any) {
     let evnKeyup = e.target.value;
     if (evnKeyup == '') {
-      this.lookupOption = this.onBuildOption('lookup');
+      for (let lk of this.lookupOption) {
+        if (lk.name == dsFld.name) {
+          dsFld.data = lk.data;
+        }
+      }
     }
     if (evnKeyup.length < 3) return;
     evnKeyup = evnKeyup.toLowerCase();
-    this.lookupOption = this.onFilterLookup(evnKeyup);
+    dsFld.data = this.onFilterLookup(evnKeyup, dsFld);
   }
 
   onTrackDs(index: number, obj: any) {
     return Object.values(obj).join('');
   }
 
-  private onFilterLookup(srch: string) {
-    const dataLookup = this.onBuildOption('lookup');
-    return dataLookup.filter((lk: { name: string }) => {
-      return lk.name.toLowerCase().indexOf(srch) > -1;
-    });
+  private onFilterLookup(srch: string, fld: any) {
+    for (let lk of this.lookupOption) {
+      if (lk.name == fld.name) {
+        return lk.data.filter((f) => {
+          return f.name.toLowerCase().indexOf(srch) > -1;
+        });
+      }
+    }
   }
 
   private onNavClick(action: string, event?: { tr?: any; td?: any }) {
@@ -235,10 +259,12 @@ export class GridComponent implements OnInit {
   }
 
   private onBuildOption(fldType: string) {
+    let arrOpt = [];
     for (let fld of this.fieldType) {
       if (fld.type == fldType) {
-        return fld['data'];
+        arrOpt.push({ name: fld.name, data: fld['data'] });
       }
     }
+    return arrOpt;
   }
 }

@@ -75,7 +75,7 @@
             class="form-select"
             formControlName="{{ fld.name }}"
           >
-            <ng-container *ngFor="let opt of selectOption">
+            <ng-container *ngFor="let opt of fld.data">
               <option value="{{ opt.value }}">{{ opt.name }}</option>
             </ng-container>
           </select>
@@ -89,12 +89,12 @@
               type="text"
               class="form-control rounded-0 border-outline"
               formControlName="{{ fld.name }}"
-              (keyup)="onKeyup($event)"
+              (keyup)="onKeyup($event, fld)"
               (keyup)="myDrop.open()"
               ngbDropdownToggle
             />
             <div ngbDropdownMenu>
-              <ng-container *ngFor="let opt of lookupOption">
+              <ng-container *ngFor="let opt of fld.data">
                 <button (click)="onClickLookup(opt, fld.name)" ngbDropdownItem>
                   {{ opt.name }}
                 </button>

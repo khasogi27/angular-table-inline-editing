@@ -1,10 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-// import {
-//   EditSettingItems,
-//   SelectOption,
-//   ToolbarItems,
-// } from './t-grid/tbr-grid/tbr-grid.component';
-import { SelectOption, FieldType } from './t-grid/grid/grid.component';
+import { FieldType } from './t-grid/grid/grid.component';
 
 interface User {
   id: number | string;
@@ -22,27 +17,6 @@ interface User {
 })
 export class AppComponent implements OnInit {
   @ViewChild('grid') grid: any;
-  // public gridEditSettings: EditSettingItems = {
-  //   allowEditing: true,
-  //   allowAdding: true,
-  //   allowDeleting: true,
-  // };
-
-  public gridInlineEditing: boolean = true;
-
-  // public gridToolbar: ToolbarItems[] = [
-  //   'Add',
-  //   'Save',
-  //   'Edit',
-  //   'Delete',
-  //   'Cancel',
-  // ];
-
-  public gridSelectOption: SelectOption[] = [
-    { name: 'Designer', value: '1' },
-    { name: 'Engineer', value: '2' },
-    { name: 'Support', value: '3' },
-  ];
 
   public gridField: FieldType[] = [
     // {
@@ -60,16 +34,16 @@ export class AppComponent implements OnInit {
     //   type: 'input',
     //   text: 'email case'
     // },
-    // {
-    //   name: 'title',
-    //   type: 'select',
-    //   text: 'title case',
-    //   data: [
-    //     { name: 'Designer', value: '1' },
-    //     { name: 'Engineer', value: '2' },
-    //     { name: 'Support', value: '3' },
-    //   ],
-    // },
+    {
+      name: 'title',
+      type: 'select',
+      text: 'title case',
+      data: [
+        { name: 'Designer', value: '1' },
+        { name: 'Engineer', value: '2' },
+        { name: 'Support', value: '3' },
+      ],
+    },
     {
       name: 'domain',
       type: 'lookup',
@@ -79,6 +53,18 @@ export class AppComponent implements OnInit {
         { name: '.idomaret', value: '2' },
         { name: '.net', value: '3' },
         { name: '.combro', value: '4' },
+      ],
+    },
+    {
+      name: 'country',
+      type: 'lookup',
+      text: 'country case',
+      data: [
+        { name: 'indonesia', value: '1' },
+        { name: 'mamarika', value: '2' },
+        { name: 'korea', value: '3' },
+        { name: 'italy', value: '4' },
+        { name: 'vrindavan', value: '4' },
       ],
     },
     {
@@ -104,6 +90,7 @@ export class AppComponent implements OnInit {
       contract: true,
       date: '20-10-1997',
       domain: '.comodo',
+      country: 'mamarika',
     },
     {
       id: '6de39701b',
@@ -113,6 +100,7 @@ export class AppComponent implements OnInit {
       contract: false,
       date: '20-10-1997',
       domain: '.idomaret',
+      country: 'indonesia',
     },
     {
       id: '8b3a6dd017',
@@ -122,6 +110,7 @@ export class AppComponent implements OnInit {
       contract: true,
       date: '20-10-1997',
       domain: '.net',
+      country: 'italy',
     },
   ];
 
@@ -135,8 +124,4 @@ export class AppComponent implements OnInit {
       // this.grid.newData$.complete();
     });
   }
-
-  // public onActionClick(event: any) {
-  //   // console.log(event, '<<< data');
-  // }
 }
