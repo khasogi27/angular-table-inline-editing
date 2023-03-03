@@ -20,9 +20,9 @@ export class AppComponent implements OnInit {
 
   public gridField: FieldType[] = [
     // {
-    //   name: 'id',
+    //   name: 'userId',
     //   type: 'label',
-    //   text: 'id case'
+    //   text: 'id case',
     // },
     {
       name: 'name',
@@ -55,18 +55,18 @@ export class AppComponent implements OnInit {
         { name: '.combro', value: '4' },
       ],
     },
-    {
-      name: 'country',
-      type: 'lookup',
-      text: 'country case',
-      data: [
-        { name: 'indonesia', value: '1' },
-        { name: 'mamarika', value: '2' },
-        { name: 'korea', value: '3' },
-        { name: 'italy', value: '4' },
-        { name: 'vrindavan', value: '4' },
-      ],
-    },
+    // {
+    //   name: 'country',
+    //   type: 'lookup',
+    //   text: 'country case',
+    //   data: [
+    //     { name: 'indonesia', value: '1' },
+    //     { name: 'mamarika', value: '2' },
+    //     { name: 'korea', value: '3' },
+    //     { name: 'italy', value: '4' },
+    //     { name: 'vrindavan', value: '4' },
+    //   ],
+    // },
     {
       name: 'contract',
       type: 'checkbox',
@@ -79,11 +79,13 @@ export class AppComponent implements OnInit {
     // },
   ];
 
+  public dsKey: string = 'userId';
+
   public dsUser1: User[] | any = [];
 
   public dsUser: User[] | any = [
     {
-      id: '56748fb3e3',
+      userId: '56748fb3e3',
       name: 'Paweł',
       title: '1',
       email: 'paweluna@howstuffworks.com',
@@ -93,7 +95,7 @@ export class AppComponent implements OnInit {
       country: 'mamarika',
     },
     {
-      id: '6de39701b',
+      userId: '6de39701b',
       name: 'Jeffie',
       title: '2',
       email: 'jlewzey1@seesaa.net',
@@ -103,7 +105,7 @@ export class AppComponent implements OnInit {
       country: 'indonesia',
     },
     {
-      id: '8b3a6dd017',
+      userId: '8b3a6dd017',
       name: 'Mallory',
       title: '3',
       email: 'mhulme2@domainmarket.com',

@@ -53,10 +53,12 @@ export class GridComponent implements OnInit {
   @ViewChild('trEditor') trEditor: ElementRef | any;
   @ViewChild('tbodyEditor') tbodyEditor: ElementRef | any;
 
+  @Input() dataKey?: string;
   @Input() dataSource: any[] = [];
   @Input() fieldType: FieldType[] = [];
 
-  private keyId!: string;
+  private countId: number = 0;
+  public dsTable: any[] = [];
   public tableValue: { action: string; data: any[] }[] = [];
   public newData$: any = new Subject<tableValue>();
   public dsIcon: any = TablerIcon;
@@ -92,21 +94,25 @@ export class GridComponent implements OnInit {
       }
       if (this.dataSource == null) {
         this.dataSource = [];
+        this.dsTable = [];
       }
-      this.dataSource.push(dsNewrow);
+      this.dsTable.push(dsNewrow);
       this.form = this.fb.group(dsNewrow);
       return;
     }
     for (let item of this.dataSource) {
       let dsObj = {};
       for (let e of this.fieldType) {
+        if (this.dataKey != undefined) {
+          dsObj[this.dataKey] = item[this.dataKey];
+        }
         dsObj[e.name] = item[e.name];
         dsObj['isEdit'] = false;
       }
       dsFilter.push(dsObj);
       continue;
     }
-    this.dataSource = dsFilter;
+    this.dsTable = dsFilter;
 
     this.lookupOption = this.onBuildOption('lookup');
     this.selectOption = this.onBuildOption('select');
@@ -151,7 +157,11 @@ export class GridComponent implements OnInit {
       this.rd.addClass(evnTd, 'w-1');
       return this.rd.setProperty(evnTd, 'innerHTML', setIcon);
     }
-    if (field.type == 'input' || field.type == 'lookup') {
+    if (
+      field.type == 'label' ||
+      field.type == 'input' ||
+      field.type == 'lookup'
+    ) {
       return data[field.name];
     }
   }
@@ -203,6 +213,7 @@ export class GridComponent implements OnInit {
     if (action == 'add') {
       this.form.reset();
       this.showEditor = true;
+      this.rowIdx = event.tr.rowIndex;
       let nextSibling = this.rd.nextSibling(event.tr);
       if (nextSibling.rowIndex == undefined) {
         this.rd.appendChild(
@@ -221,7 +232,7 @@ export class GridComponent implements OnInit {
       this.form.reset();
       this.showEditor = true;
       this.rowIdx = event.tr.rowIndex;
-      const dataVal = this.dataSource[this.rowIdx - 1];
+      const dataVal = this.dsTable[this.rowIdx - 1];
       this.form.patchValue(dataVal);
       this.rd.insertBefore(
         this.tbodyView.nativeElement,
@@ -234,29 +245,74 @@ export class GridComponent implements OnInit {
       this.showEditor = false;
       let formVal = this.form.value;
       formVal['isEdit'] = false;
-      this.newData$.next({ action: this.statusAction, data: formVal });
+      let isAddTable = true;
       if (this.statusAction == 'add') {
-        this.dataSource.push(formVal);
+        this.dsTable.splice(this.rowIdx, 0, formVal);
       } else {
-        this.dataSource[this.rowIdx - 1] = formVal;
+        this.dsTable[this.rowIdx - 1] = formVal;
+        for (let tv of this.tableValue) {
+          if (tv.action == 'edit') {
+            tv.data = formVal;
+            isAddTable = false;
+            break;
+          }
+        }
+      }
+      if (isAddTable) {
+        this.tableValue.push({ action: this.statusAction, data: formVal });
+        // const dataId = this.countId.toString();
+        // const dataAttr = 'data-' + this.dataKey;
+        // this.rd.setAttribute(
+        //   this.tbodyEditor.nativeElement.children[this.rowIdx],
+        //   dataAttr,
+        //   dataId
+        // );
+        // this.countId--;
       }
       this.rd.appendChild(
         this.tbodyEditor.nativeElement,
         this.trEditor.nativeElement
       );
-      this.tableValue.push({ action: this.statusAction, data: formVal });
       this.statusAction = action;
     } else if (action == 'delete') {
       this.rowIdx = event.tr.rowIndex;
-      const dataVal = this.dataSource[this.rowIdx - 1];
-      this.dataSource.find((ds, idx) => {
-        ds == dataVal ? this.dataSource.splice(idx, 1) : '';
-      });
-      this.tableValue.push({ action: action, data: dataVal });
+      const dataVal = this.dsTable[this.rowIdx - 1];
+      let isAddTable = true;
+      let temp!: any;
+      let found = false;
+      for (let tv of this.tableValue) {
+        if (tv.data == dataVal) {
+        }
+      }
+      // for (let tv of this.tableValue) {
+      //   for (let ds of this.dataSource) {
+      //     if (tv.action == 'edit' && ds != tv.data) {
+      //       temp = tv.data;
+      //       isAddTable = false;
+      //     }
+      //     if (tv.action == 'add' && ds != tv.data) {
+      //       temp = tv.data;
+      //       isAddTable = false;
+      //     }
+      //   }
+      // }
+      // let idx = 0;
+      // for (let fnd of this.tableValue) {
+      //   if (fnd.data == temp) {
+      //     this.tableValue.splice(idx, 1);
+      //     break;
+      //   }
+      //   idx++;
+      // }
+      this.dsTable.splice(this.rowIdx - 1, 1);
+      if (isAddTable) {
+        this.tableValue.push({ action: action, data: dataVal });
+      }
     } else if (action == 'cancel') {
       this.showEditor = false;
-      if (this.rowIdx > 1) {
-        let dataVal = this.dataSource[this.rowIdx - 1];
+      console.log(this.rowIdx, '<<< this.rowIdx');
+      if (this.rowIdx > 0) {
+        let dataVal = this.dsTable[this.rowIdx - 1];
         dataVal['isEdit'] = !dataVal['isEdit'];
       }
       this.rd.appendChild(

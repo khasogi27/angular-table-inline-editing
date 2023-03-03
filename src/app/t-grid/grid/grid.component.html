@@ -11,7 +11,7 @@
     <tbody #tbodyView class="border border-1 bg-white rounded-0">
       <tr
         #trView
-        *ngFor="let item of dataSource; let i = index; trackBy: onTrackDs"
+        *ngFor="let item of dsTable; let i = index; trackBy: onTrackDs"
       >
         <td role="button" class="overflow-hidden p-0">
           <div ngbDropdown container="body">
