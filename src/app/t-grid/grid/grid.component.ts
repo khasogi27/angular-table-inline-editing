@@ -57,7 +57,8 @@ export class GridComponent implements OnInit {
   @Input() dataSource: any[] = [];
   @Input() fieldType: FieldType[] = [];
 
-  private countId: number = 0;
+  private idCount: number = 0;
+  private dsKey!: string;
   public dsTable: any[] = [];
   public tableValue: { action: string; data: any[] }[] = [];
   public newData$: any = new Subject<tableValue>();
@@ -85,6 +86,7 @@ export class GridComponent implements OnInit {
   constructor(private rd: Renderer2, private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.dsKey = this.dataKey.toLowerCase();
     let dsFilter = [];
     let dsNewrow = {};
     if (this.dataSource == null || this.dataSource.length == 0) {
@@ -128,7 +130,15 @@ export class GridComponent implements OnInit {
     if (event.key == 'Escape') this.onNavClick('cancel');
   }
 
-  onFilterTbody(evnTd: any, field: any, data: any) {
+  onFilterTbody(evnTd: any, evnTr: any, field: any, data: any) {
+    const keyData = Object.keys(data);
+    const dataAttr = 'data-' + this.dsKey;
+    for (let dk of keyData) {
+      if (dk == this.dataKey) {
+        this.rd.setAttribute(evnTr, dataAttr, data[this.dataKey]);
+        break;
+      }
+    }
     if (field.type == 'select') {
       for (let opt of this.selectOption) {
         for (let op of opt.data) {
@@ -176,11 +186,6 @@ export class GridComponent implements OnInit {
     this.form.patchValue(obj);
   }
 
-  onDropdownClick(evnTr: any, action: string, data: any) {
-    if (this.showEditor) return;
-    this.onNavClick(action, { tr: evnTr });
-  }
-
   onKeyup(e: any, dsFld: any) {
     let evnKeyup = e.target.value;
     if (evnKeyup == '') {
@@ -199,14 +204,9 @@ export class GridComponent implements OnInit {
     return Object.values(obj).join('');
   }
 
-  private onFilterLookup(srch: string, fld: any) {
-    for (let lk of this.lookupOption) {
-      if (lk.name == fld.name) {
-        return lk.data.filter((f) => {
-          return f.name.toLowerCase().indexOf(srch) > -1;
-        });
-      }
-    }
+  onDropdownClick(evnTr: any, action: string, data: any) {
+    if (this.showEditor) return;
+    this.onNavClick(action, { tr: evnTr });
   }
 
   private onNavClick(action: string, event?: { tr?: any; td?: any }) {
@@ -245,72 +245,61 @@ export class GridComponent implements OnInit {
       this.showEditor = false;
       let formVal = this.form.value;
       formVal['isEdit'] = false;
-      let isAddTable = true;
       if (this.statusAction == 'add') {
+        if (this.dataKey != undefined) formVal[this.dataKey] = this.idCount;
         this.dsTable.splice(this.rowIdx, 0, formVal);
+        this.tableValue.push({ action: this.statusAction, data: formVal });
+        this.idCount--;
       } else {
+        let isAddTable = true;
+        formVal[this.dataKey] = this.dsTable[this.rowIdx - 1][this.dataKey];
         this.dsTable[this.rowIdx - 1] = formVal;
         for (let tv of this.tableValue) {
-          if (tv.action == 'edit') {
+          if (tv.data[this.dataKey] == formVal[this.dataKey]) {
             tv.data = formVal;
             isAddTable = false;
             break;
           }
         }
-      }
-      if (isAddTable) {
-        this.tableValue.push({ action: this.statusAction, data: formVal });
-        // const dataId = this.countId.toString();
-        // const dataAttr = 'data-' + this.dataKey;
-        // this.rd.setAttribute(
-        //   this.tbodyEditor.nativeElement.children[this.rowIdx],
-        //   dataAttr,
-        //   dataId
-        // );
-        // this.countId--;
+        if (isAddTable) {
+          this.tableValue.push({ action: this.statusAction, data: formVal });
+        }
       }
       this.rd.appendChild(
         this.tbodyEditor.nativeElement,
         this.trEditor.nativeElement
       );
-      this.statusAction = action;
     } else if (action == 'delete') {
       this.rowIdx = event.tr.rowIndex;
-      const dataVal = this.dsTable[this.rowIdx - 1];
-      let isAddTable = true;
-      let temp!: any;
-      let found = false;
+      let dataVal = this.dsTable[this.rowIdx - 1];
+      let isDeleteTable = true;
+      let idx = 0;
       for (let tv of this.tableValue) {
-        if (tv.data == dataVal) {
+        if (dataVal[this.dataKey] != tv.data[this.dataKey]) {
+          continue;
         }
+        isDeleteTable = false;
+        for (let ds of this.dataSource) {
+          if (dataVal[this.dataKey] == ds[this.dataKey]) {
+            this.dsTable.splice(this.rowIdx - 1, 1);
+            tv.action = action;
+            tv.data = dataVal;
+            break;
+          }
+          if (dataVal[this.dataKey] <= 0) {
+            this.dsTable.splice(this.rowIdx - 1, 1);
+            this.tableValue.splice(idx, 1);
+            break;
+          }
+        }
+        idx++;
       }
-      // for (let tv of this.tableValue) {
-      //   for (let ds of this.dataSource) {
-      //     if (tv.action == 'edit' && ds != tv.data) {
-      //       temp = tv.data;
-      //       isAddTable = false;
-      //     }
-      //     if (tv.action == 'add' && ds != tv.data) {
-      //       temp = tv.data;
-      //       isAddTable = false;
-      //     }
-      //   }
-      // }
-      // let idx = 0;
-      // for (let fnd of this.tableValue) {
-      //   if (fnd.data == temp) {
-      //     this.tableValue.splice(idx, 1);
-      //     break;
-      //   }
-      //   idx++;
-      // }
-      this.dsTable.splice(this.rowIdx - 1, 1);
-      if (isAddTable) {
+      if (isDeleteTable) {
+        this.dsTable.splice(this.rowIdx - 1, 1);
         this.tableValue.push({ action: action, data: dataVal });
       }
     } else if (action == 'cancel') {
       this.showEditor = false;
-      console.log(this.rowIdx, '<<< this.rowIdx');
       if (this.rowIdx > 0) {
         let dataVal = this.dsTable[this.rowIdx - 1];
         dataVal['isEdit'] = !dataVal['isEdit'];
@@ -330,5 +319,15 @@ export class GridComponent implements OnInit {
       }
     }
     return arrOpt;
+  }
+
+  private onFilterLookup(srch: string, fld: any) {
+    for (let lk of this.lookupOption) {
+      if (lk.name == fld.name) {
+        return lk.data.filter((f) => {
+          return f.name.toLowerCase().indexOf(srch) > -1;
+        });
+      }
+    }
   }
 }

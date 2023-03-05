@@ -38,7 +38,7 @@
           <td
             #tdView
             class="custom-td"
-            [innerHTML]="onFilterTbody(tdView, fld, item)"
+            [innerHTML]="onFilterTbody(tdView, trView, fld, item)"
           ></td>
         </ng-container>
       </tr>
@@ -62,7 +62,6 @@
             type="text"
             class="form-control rounded-0 border-outline"
             formControlName="{{ fld.name }}"
-            autofocus
           />
           <input
             *ngIf="fld.type == 'checkbox'"

@@ -34,16 +34,16 @@ export class AppComponent implements OnInit {
     //   type: 'input',
     //   text: 'email case'
     // },
-    {
-      name: 'title',
-      type: 'select',
-      text: 'title case',
-      data: [
-        { name: 'Designer', value: '1' },
-        { name: 'Engineer', value: '2' },
-        { name: 'Support', value: '3' },
-      ],
-    },
+    // {
+    //   name: 'title',
+    //   type: 'select',
+    //   text: 'title case',
+    //   data: [
+    //     { name: 'Designer', value: '1' },
+    //     { name: 'Engineer', value: '2' },
+    //     { name: 'Support', value: '3' },
+    //   ],
+    // },
     {
       name: 'domain',
       type: 'lookup',

@@ -1,12 +1,14 @@
-<button class="btn" (click)="onSaveClick()">Save</button>
-
-<core-grid 
+<core-grid
   #grid
-  [dataSource]="dsUser" 
+  [dataSource]="dsUser"
   [dataKey]="dsKey"
   [fieldType]="gridField"
-  >
+>
 </core-grid>
+
+<div *ngFor="let item of grid.tableValue">
+  <span>{{ item | json }}</span>
+</div>
 
 <!-- <div class="page">
   <div class="container-xl">
