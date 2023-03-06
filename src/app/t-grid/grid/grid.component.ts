@@ -262,9 +262,7 @@ export class GridComponent implements OnInit {
         }
       }
       if (isAddTable) {
-        const idxVal = Math.abs(this.idCount);
-        const objVal = { action: this.statusAction, data: formVal };
-        this.tableValue.splice(idxVal, 0, objVal);
+        this.tableValue.push({ action: this.statusAction, data: formVal });
       }
       this.rd.appendChild(
         this.tbodyEditor.nativeElement,
@@ -274,33 +272,36 @@ export class GridComponent implements OnInit {
       this.rowIdx = event.tr.rowIndex;
       let dataVal = this.dsTable[this.rowIdx - 1];
       let isDeleteTable = true;
+      let isCheckTv = true;
+      let idx = 0;
       for (let tv of this.tableValue) {
+        if (this.tableValue.length == 0) break;
         if (dataVal[this.dataKey] != tv.data[this.dataKey]) {
+          idx++;
           continue;
         }
+        isCheckTv = false;
         isDeleteTable = false;
-        for (let ds of this.dataSource) {
-          if (dataVal[this.dataKey] == ds[this.dataKey]) {
-            this.dsTable.splice(this.rowIdx - 1, 1);
-            tv.action = action;
-            tv.data = dataVal;
-            break;
-          } else if (dataVal[this.dataKey] <= 0) {
-            this.dsTable.splice(this.rowIdx - 1, 1);
-            const idxVal = Math.abs(this.idCount);
-            const objVal = { action: this.statusAction, data: dataVal };
-            this.tableValue.splice(idxVal, 0, objVal);
-            break;
+        if (!isCheckTv) {
+          for (let ds of this.dataSource) {
+            if (dataVal[this.dataKey] == ds[this.dataKey]) {
+              isCheckTv = true;
+              this.dsTable.splice(this.rowIdx - 1, 1);
+              tv.action = action;
+              tv.data = dataVal;
+              break;
+            }
           }
+        }
+        if (!isCheckTv) {
+          this.dsTable.splice(this.rowIdx - 1, 1);
+          this.tableValue.splice(idx, 1);
         }
       }
       if (isDeleteTable) {
         this.dsTable.splice(this.rowIdx - 1, 1);
-        const idxVal = Math.abs(this.idCount);
-        const objVal = { action: this.statusAction, data: dataVal };
-        this.tableValue.splice(idxVal, 0, objVal);
+        this.tableValue.push({ action: action, data: dataVal });
       }
-      console.log(this.tableValue, '<<< this.tableValue');
     } else if (action == 'cancel') {
       this.showEditor = false;
       if (this.rowIdx > 0) {
