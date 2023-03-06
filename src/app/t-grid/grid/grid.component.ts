@@ -245,13 +245,12 @@ export class GridComponent implements OnInit {
       this.showEditor = false;
       let formVal = this.form.value;
       formVal['isEdit'] = false;
+      let isAddTable = true;
       if (this.statusAction == 'add') {
         if (this.dataKey != undefined) formVal[this.dataKey] = this.idCount;
         this.dsTable.splice(this.rowIdx, 0, formVal);
-        this.tableValue.push({ action: this.statusAction, data: formVal });
         this.idCount--;
       } else {
-        let isAddTable = true;
         formVal[this.dataKey] = this.dsTable[this.rowIdx - 1][this.dataKey];
         this.dsTable[this.rowIdx - 1] = formVal;
         for (let tv of this.tableValue) {
@@ -261,9 +260,11 @@ export class GridComponent implements OnInit {
             break;
           }
         }
-        if (isAddTable) {
-          this.tableValue.push({ action: this.statusAction, data: formVal });
-        }
+      }
+      if (isAddTable) {
+        const idxVal = Math.abs(this.idCount);
+        const objVal = { action: this.statusAction, data: formVal };
+        this.tableValue.splice(idxVal, 0, objVal);
       }
       this.rd.appendChild(
         this.tbodyEditor.nativeElement,
@@ -273,7 +274,6 @@ export class GridComponent implements OnInit {
       this.rowIdx = event.tr.rowIndex;
       let dataVal = this.dsTable[this.rowIdx - 1];
       let isDeleteTable = true;
-      let idx = 0;
       for (let tv of this.tableValue) {
         if (dataVal[this.dataKey] != tv.data[this.dataKey]) {
           continue;
@@ -285,19 +285,22 @@ export class GridComponent implements OnInit {
             tv.action = action;
             tv.data = dataVal;
             break;
-          }
-          if (dataVal[this.dataKey] <= 0) {
+          } else if (dataVal[this.dataKey] <= 0) {
             this.dsTable.splice(this.rowIdx - 1, 1);
-            this.tableValue.splice(idx, 1);
+            const idxVal = Math.abs(this.idCount);
+            const objVal = { action: this.statusAction, data: dataVal };
+            this.tableValue.splice(idxVal, 0, objVal);
             break;
           }
         }
-        idx++;
       }
       if (isDeleteTable) {
         this.dsTable.splice(this.rowIdx - 1, 1);
-        this.tableValue.push({ action: action, data: dataVal });
+        const idxVal = Math.abs(this.idCount);
+        const objVal = { action: this.statusAction, data: dataVal };
+        this.tableValue.splice(idxVal, 0, objVal);
       }
+      console.log(this.tableValue, '<<< this.tableValue');
     } else if (action == 'cancel') {
       this.showEditor = false;
       if (this.rowIdx > 0) {
