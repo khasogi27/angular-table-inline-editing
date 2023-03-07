@@ -252,7 +252,14 @@ export class GridComponent implements OnInit {
         this.idCount--;
       } else {
         formVal[this.dataKey] = this.dsTable[this.rowIdx - 1][this.dataKey];
-        this.dsTable[this.rowIdx - 1] = formVal;
+        let arrTable = [];
+        for (let item of this.dsTable) {
+          if (item[this.dataKey] == formVal[this.dataKey]) {
+            item = formVal;
+          }
+          arrTable.push(item);
+        }
+        this.dsTable = arrTable;
         for (let tv of this.tableValue) {
           if (tv.data[this.dataKey] == formVal[this.dataKey]) {
             tv.data = formVal;
@@ -272,7 +279,7 @@ export class GridComponent implements OnInit {
       this.rowIdx = event.tr.rowIndex;
       let dataVal = this.dsTable[this.rowIdx - 1];
       let isDeleteTable = true;
-      let isCheckTv = true;
+      let isCheckOriginal = false;
       let idx = 0;
       for (let tv of this.tableValue) {
         if (this.tableValue.length == 0) break;
@@ -280,12 +287,12 @@ export class GridComponent implements OnInit {
           idx++;
           continue;
         }
-        isCheckTv = false;
         isDeleteTable = false;
-        if (!isCheckTv) {
+        if (!isDeleteTable) {
           for (let ds of this.dataSource) {
             if (dataVal[this.dataKey] == ds[this.dataKey]) {
-              isCheckTv = true;
+              isDeleteTable = true;
+              isCheckOriginal = true;
               this.dsTable.splice(this.rowIdx - 1, 1);
               tv.action = action;
               tv.data = dataVal;
@@ -293,13 +300,16 @@ export class GridComponent implements OnInit {
             }
           }
         }
-        if (!isCheckTv) {
+        if (!isDeleteTable) {
           this.dsTable.splice(this.rowIdx - 1, 1);
           this.tableValue.splice(idx, 1);
+          break;
         }
       }
-      if (isDeleteTable) {
+      if (isDeleteTable && !isCheckOriginal) {
         this.dsTable.splice(this.rowIdx - 1, 1);
+      }
+      if (!isCheckOriginal) {
         this.tableValue.push({ action: action, data: dataVal });
       }
     } else if (action == 'cancel') {
