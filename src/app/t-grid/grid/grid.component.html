@@ -17,7 +17,7 @@
           <div ngbDropdown container="body">
             <span
               *ngIf="!showEditor"
-              [innerHTML]="onFilterIcon() | saveSvg"
+              [innerHTML]="dsIcon.moreVert | saveSvg"
               ngbDropdownToggle
             >
             </span>
@@ -25,7 +25,7 @@
               <ng-container *ngFor="let dd of dsDropdown">
                 <button
                   ngbDropdownItem
-                  (click)="onDropdownClick(trView, dd.action, item)"
+                  (click)="onDropdownClick(trView, dd.action)"
                 >
                   <span class="me-2" [innerHTML]="dd.icon | saveSvg"></span>
                   {{ dd.name | titlecase }}
@@ -88,7 +88,7 @@
               type="text"
               class="form-control rounded-0 border-outline"
               formControlName="{{ fld.name }}"
-              (keyup)="onKeyup($event, fld)"
+              (keyup)="onClickLookup($event, fld)"
               (keyup)="myDrop.open()"
               ngbDropdownToggle
             />

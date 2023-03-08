@@ -37,11 +37,6 @@ export interface FieldType {
   param?: any;
 }
 
-interface tableValue {
-  action: string;
-  data: any[];
-}
-
 @Component({
   selector: 'core-grid',
   templateUrl: './grid.component.html',
@@ -57,11 +52,9 @@ export class GridComponent implements OnInit {
   @Input() dataSource: any[] = [];
   @Input() fieldType: FieldType[] = [];
 
-  private idCount: number = 0;
-  private dsKey!: string;
   public dsTable: any[] = [];
-  public tableValue: { action: string; data: any[] }[] = [];
-  public newData$: any = new Subject<tableValue>();
+  public tableValue: { action: string }[] | any[] = [];
+  public newData$: any = new Subject<any>();
   public dsIcon: any = TablerIcon;
   public selectOption: SelectOption[] = [];
   public lookupOption: LookupOption[] = [];
@@ -71,14 +64,11 @@ export class GridComponent implements OnInit {
     action: string;
     icon: string;
   }[] = [
-    // { name: 'add before', action: 'add-up', icon: this.dsIcon.addBefore },
-    // { name: 'add after', action: 'add-down', icon: this.dsIcon.addAfter },
     { name: 'add', action: 'add', icon: this.dsIcon.addBefore },
     { name: 'edit', action: 'edit', icon: this.dsIcon.edit },
     { name: 'delete', action: 'delete', icon: this.dsIcon.delete },
   ];
   public form: FormGroup;
-  private createTr: HTMLTableRowElement = this.rd.createElement('tr');
   public rowIdx: number = -1;
   public showEditor: boolean = false;
   public statusAction!: string;
@@ -86,7 +76,6 @@ export class GridComponent implements OnInit {
   constructor(private rd: Renderer2, private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.dsKey = this.dataKey.toLowerCase();
     let dsFilter = [];
     let dsNewrow = {};
     if (this.dataSource == null || this.dataSource.length == 0) {
@@ -126,19 +115,54 @@ export class GridComponent implements OnInit {
 
   @HostListener('document:keydown', ['$event'])
   onKeydownHandler(event: KeyboardEvent) {
-    if (event.key == 'Enter') this.onNavClick('save');
-    if (event.key == 'Escape') this.onNavClick('cancel');
+    if (event.key == 'Enter') {
+      this.showEditor = false;
+      let formVal = this.form.value;
+      formVal['isEdit'] = false;
+      let isAddTable = true;
+      if (this.statusAction == 'add') {
+        if (this.dataKey != undefined) formVal[this.dataKey] = Date.now();
+        this.dsTable.splice(this.rowIdx, 0, formVal);
+      } else {
+        formVal[this.dataKey] = this.dsTable[this.rowIdx - 1][this.dataKey];
+        for (let i = 0; i < this.dsTable.length; i++) {
+          if (this.dsTable[i][this.dataKey] == formVal[this.dataKey]) {
+            this.dsTable[i] = formVal;
+          }
+        }
+        for (let x = 0; x < this.tableValue.length; x++) {
+          if (this.tableValue[x][this.dataKey] == formVal[this.dataKey]) {
+            formVal['action'] = this.tableValue[x]['action'];
+            this.tableValue[x] = { ...formVal };
+            isAddTable = false;
+            console.log(this.tableValue, '<<< this.tableValue');
+            break;
+          }
+        }
+      }
+      if (isAddTable) {
+        this.tableValue.push({ action: this.statusAction, ...formVal });
+      }
+      this.rd.appendChild(
+        this.tbodyEditor.nativeElement,
+        this.trEditor.nativeElement
+      );
+      return;
+    }
+    if (event.key == 'Escape') {
+      this.showEditor = false;
+      if (this.dsTable[this.rowIdx - 1] == undefined) return;
+      let dataVal = this.dsTable[this.rowIdx - 1];
+      dataVal['isEdit'] = !dataVal['isEdit'];
+      this.rd.appendChild(
+        this.tbodyEditor.nativeElement,
+        this.trEditor.nativeElement
+      );
+    }
+    return;
   }
 
   onFilterTbody(evnTd: any, evnTr: any, field: any, data: any) {
-    const keyData = Object.keys(data);
-    const dataAttr = 'data-' + this.dsKey;
-    for (let dk of keyData) {
-      if (dk == this.dataKey) {
-        this.rd.setAttribute(evnTr, dataAttr, data[this.dataKey]);
-        break;
-      }
-    }
     if (field.type == 'select') {
       for (let opt of this.selectOption) {
         for (let op of opt.data) {
@@ -204,16 +228,18 @@ export class GridComponent implements OnInit {
     return Object.values(obj).join('');
   }
 
-  onDropdownClick(evnTr: any, action: string, data: any) {
+  onDropdownClick(evnTr: any, action: string) {
     if (this.showEditor) return;
     this.onNavClick(action, { tr: evnTr });
   }
 
   private onNavClick(action: string, event?: { tr?: any; td?: any }) {
+    this.rowIdx = event.tr.rowIndex;
+    const formVal = this.dsTable[this.rowIdx - 1];
+
     if (action == 'add') {
       this.form.reset();
       this.showEditor = true;
-      this.rowIdx = event.tr.rowIndex;
       let nextSibling = this.rd.nextSibling(event.tr);
       if (nextSibling.rowIndex == undefined) {
         this.rd.appendChild(
@@ -231,9 +257,7 @@ export class GridComponent implements OnInit {
     } else if (action == 'edit') {
       this.form.reset();
       this.showEditor = true;
-      this.rowIdx = event.tr.rowIndex;
-      const dataVal = this.dsTable[this.rowIdx - 1];
-      this.form.patchValue(dataVal);
+      this.form.patchValue(formVal);
       this.rd.insertBefore(
         this.tbodyView.nativeElement,
         this.trEditor.nativeElement,
@@ -241,61 +265,26 @@ export class GridComponent implements OnInit {
       );
       this.rd.removeChild(this.tbodyView.nativeElement, event.tr);
       this.statusAction = action;
-    } else if (action == 'save') {
-      this.showEditor = false;
-      let formVal = this.form.value;
-      formVal['isEdit'] = false;
-      let isAddTable = true;
-      if (this.statusAction == 'add') {
-        if (this.dataKey != undefined) formVal[this.dataKey] = this.idCount;
-        this.dsTable.splice(this.rowIdx, 0, formVal);
-        this.idCount--;
-      } else {
-        formVal[this.dataKey] = this.dsTable[this.rowIdx - 1][this.dataKey];
-        let arrTable = [];
-        for (let item of this.dsTable) {
-          if (item[this.dataKey] == formVal[this.dataKey]) {
-            item = formVal;
-          }
-          arrTable.push(item);
-        }
-        this.dsTable = arrTable;
-        for (let tv of this.tableValue) {
-          if (tv.data[this.dataKey] == formVal[this.dataKey]) {
-            tv.data = formVal;
-            isAddTable = false;
-            break;
-          }
-        }
-      }
-      if (isAddTable) {
-        this.tableValue.push({ action: this.statusAction, data: formVal });
-      }
-      this.rd.appendChild(
-        this.tbodyEditor.nativeElement,
-        this.trEditor.nativeElement
-      );
     } else if (action == 'delete') {
-      this.rowIdx = event.tr.rowIndex;
-      let dataVal = this.dsTable[this.rowIdx - 1];
       let isDeleteTable = true;
-      let isCheckOriginal = false;
+      let isCheckTv = false;
       let idx = 0;
       for (let tv of this.tableValue) {
         if (this.tableValue.length == 0) break;
-        if (dataVal[this.dataKey] != tv.data[this.dataKey]) {
+        if (formVal[this.dataKey] != tv[this.dataKey]) {
           idx++;
           continue;
         }
+        isCheckTv = true;
         isDeleteTable = false;
         if (!isDeleteTable) {
           for (let ds of this.dataSource) {
-            if (dataVal[this.dataKey] == ds[this.dataKey]) {
+            if (formVal[this.dataKey] == ds[this.dataKey]) {
               isDeleteTable = true;
-              isCheckOriginal = true;
+              isCheckTv = true;
               this.dsTable.splice(this.rowIdx - 1, 1);
-              tv.action = action;
-              tv.data = dataVal;
+              tv['action'] = action;
+              tv = { ...formVal };
               break;
             }
           }
@@ -306,22 +295,12 @@ export class GridComponent implements OnInit {
           break;
         }
       }
-      if (isDeleteTable && !isCheckOriginal) {
+      if (isDeleteTable && !isCheckTv) {
         this.dsTable.splice(this.rowIdx - 1, 1);
       }
-      if (!isCheckOriginal) {
-        this.tableValue.push({ action: action, data: dataVal });
+      if (!isCheckTv) {
+        this.tableValue.push({ action, ...formVal });
       }
-    } else if (action == 'cancel') {
-      this.showEditor = false;
-      if (this.rowIdx > 0) {
-        let dataVal = this.dsTable[this.rowIdx - 1];
-        dataVal['isEdit'] = !dataVal['isEdit'];
-      }
-      this.rd.appendChild(
-        this.tbodyEditor.nativeElement,
-        this.trEditor.nativeElement
-      );
     }
   }
 
