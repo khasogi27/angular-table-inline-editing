@@ -11,10 +11,3 @@
 .dropdown-toggle::after {
   display: none;
 }
-
-.dropdown-menu {
-  border-radius: 0;
-  position: fixed !important;
-  inset: unset !important;
-  transform: unset !important;
-}
