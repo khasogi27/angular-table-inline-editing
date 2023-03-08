@@ -132,10 +132,9 @@ export class GridComponent implements OnInit {
         }
         for (let x = 0; x < this.tableValue.length; x++) {
           if (this.tableValue[x][this.dataKey] == formVal[this.dataKey]) {
-            formVal['action'] = this.tableValue[x]['action'];
-            this.tableValue[x] = { ...formVal };
+            const action = this.tableValue[x]['action'];
+            this.tableValue[x] = { action, ...formVal };
             isAddTable = false;
-            console.log(this.tableValue, '<<< this.tableValue');
             break;
           }
         }
