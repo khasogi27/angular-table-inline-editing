@@ -1,12 +1,11 @@
 import {
   Component,
   Input,
-  OnInit,
   Renderer2,
   ElementRef,
   ViewChild,
   HostListener,
-  Output,
+  OnChanges,
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -42,7 +41,7 @@ export interface FieldType {
   templateUrl: './grid.component.html',
   styleUrls: ['./grid.component.css'],
 })
-export class GridComponent implements OnInit {
+export class GridComponent implements OnChanges {
   @ViewChild('trView') trView: ElementRef | any;
   @ViewChild('tbodyView') tbodyView: ElementRef | any;
   @ViewChild('trEditor') trEditor: ElementRef | any;
@@ -75,7 +74,7 @@ export class GridComponent implements OnInit {
 
   constructor(private rd: Renderer2, private fb: FormBuilder) {}
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     let dsFilter = [];
     let dsNewrow = {};
     if (this.dataSource == null || this.dataSource.length == 0) {
@@ -209,12 +208,13 @@ export class GridComponent implements OnInit {
     this.form.patchValue(obj);
   }
 
-  onKeyup(e: any, dsFld: any) {
+  onKeyupLookup(e: any, dsFld: any) {
     let evnKeyup = e.target.value;
     if (evnKeyup == '') {
       for (let lk of this.lookupOption) {
         if (lk.name == dsFld.name) {
           dsFld.data = lk.data;
+          break;
         }
       }
     }

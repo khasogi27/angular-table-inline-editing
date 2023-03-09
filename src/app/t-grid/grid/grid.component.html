@@ -56,7 +56,10 @@
         </div>
       </td>
       <ng-container *ngFor="let fld of fieldType">
-        <td [formGroup]="form" class="py-0">
+        <td
+          [formGroup]="form"
+          class="{{ fld.type == 'checkbox' ? 'py-0' : 'p-0' }}"
+        >
           <input
             *ngIf="fld.type == 'input'"
             type="text"
@@ -89,7 +92,7 @@
               type="text"
               class="form-control rounded-0 border-outline"
               formControlName="{{ fld.name }}"
-              (keyup)="onClickLookup($event, fld)"
+              (keyup)="onKeyupLookup($event, fld)"
               (keyup)="myDrop.open()"
               ngbDropdownToggle
             />

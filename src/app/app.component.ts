@@ -1,6 +1,37 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FieldType } from './t-grid/grid/grid.component';
 
+// {
+//   userId: '56748fb3e3',
+//   name: 'Paweł',
+//   title: '1',
+//   email: 'paweluna@howstuffworks.com',
+//   contract: true,
+//   date: '20-10-1997',
+//   domain: '.comodo',
+//   country: 'mamarika',
+// },
+// {
+//   userId: '6de39701b',
+//   name: 'Jeffie',
+//   title: '2',
+//   email: 'jlewzey1@seesaa.net',
+//   contract: false,
+//   date: '20-10-1997',
+//   domain: '.idomaret',
+//   country: 'indonesia',
+// },
+// {
+//   userId: '8b3a6dd017',
+//   name: 'Mallory',
+//   title: '3',
+//   email: 'mhulme2@domainmarket.com',
+//   contract: true,
+//   date: '20-10-1997',
+//   domain: '.net',
+//   country: 'italy',
+// },
+
 interface User {
   id: number | string;
   name: string;
@@ -24,26 +55,26 @@ export class AppComponent implements OnInit {
     //   type: 'label',
     //   text: 'id case',
     // },
-    {
-      name: 'name',
-      type: 'input',
-      text: 'name case',
-    },
+    // {
+    //   name: 'name',
+    //   type: 'input',
+    //   text: 'name case',
+    // },
     // {
     //   name: 'email',
     //   type: 'input',
-    //   text: 'email case'
+    //   text: 'email case',
     // },
-    // {
-    //   name: 'title',
-    //   type: 'select',
-    //   text: 'title case',
-    //   data: [
-    //     { name: 'Designer', value: '1' },
-    //     { name: 'Engineer', value: '2' },
-    //     { name: 'Support', value: '3' },
-    //   ],
-    // },
+    {
+      name: 'title',
+      type: 'select',
+      text: 'title case',
+      data: [
+        { name: 'Designer', value: '1' },
+        { name: 'Engineer', value: '2' },
+        { name: 'Support', value: '3' },
+      ],
+    },
     {
       name: 'domain',
       type: 'lookup',
@@ -55,18 +86,18 @@ export class AppComponent implements OnInit {
         { name: '.combro', value: '4' },
       ],
     },
-    // {
-    //   name: 'country',
-    //   type: 'lookup',
-    //   text: 'country case',
-    //   data: [
-    //     { name: 'indonesia', value: '1' },
-    //     { name: 'mamarika', value: '2' },
-    //     { name: 'korea', value: '3' },
-    //     { name: 'italy', value: '4' },
-    //     { name: 'vrindavan', value: '4' },
-    //   ],
-    // },
+    {
+      name: 'country',
+      type: 'lookup',
+      text: 'country case',
+      data: [
+        { name: 'indonesia', value: '1' },
+        { name: 'mamarika', value: '2' },
+        { name: 'korea', value: '3' },
+        { name: 'italy', value: '4' },
+        { name: 'vrindavan', value: '4' },
+      ],
+    },
     {
       name: 'contract',
       type: 'checkbox',

@@ -11,3 +11,7 @@
 .dropdown-toggle::after {
   display: none;
 }
+
+.form-select {
+  border-radius: 0;
+}
