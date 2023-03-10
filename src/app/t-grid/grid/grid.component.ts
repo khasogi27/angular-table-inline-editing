@@ -120,7 +120,9 @@ export class GridComponent implements OnChanges {
       formVal['isEdit'] = false;
       let isAddTable = true;
       if (this.statusAction == 'add') {
-        if (this.dataKey != undefined) formVal[this.dataKey] = Date.now();
+        // if (this.dataKey != undefined) formVal[this.dataKey] = Date.now();
+        if (this.dataKey != undefined) formVal[this.dataKey] = this.uniqueId();
+        console.log(formVal[this.dataKey], '<<<');
         this.dsTable.splice(this.rowIdx, 0, formVal);
       } else {
         formVal[this.dataKey] = this.dsTable[this.rowIdx - 1][this.dataKey];
@@ -321,5 +323,11 @@ export class GridComponent implements OnChanges {
         });
       }
     }
+  }
+
+  private uniqueId() {
+    return Math.floor(
+      Math.random() * Math.floor(Math.random() * Date.now())
+    ).toString(16);
   }
 }

@@ -55,16 +55,16 @@ export class AppComponent implements OnInit {
     //   type: 'label',
     //   text: 'id case',
     // },
-    // {
-    //   name: 'name',
-    //   type: 'input',
-    //   text: 'name case',
-    // },
-    // {
-    //   name: 'email',
-    //   type: 'input',
-    //   text: 'email case',
-    // },
+    {
+      name: 'name',
+      type: 'input',
+      text: 'name case',
+    },
+    {
+      name: 'email',
+      type: 'input',
+      text: 'email case',
+    },
     {
       name: 'title',
       type: 'select',
@@ -75,17 +75,17 @@ export class AppComponent implements OnInit {
         { name: 'Support', value: '3' },
       ],
     },
-    {
-      name: 'domain',
-      type: 'lookup',
-      text: 'domain case',
-      data: [
-        { name: '.comodo', value: '1' },
-        { name: '.idomaret', value: '2' },
-        { name: '.net', value: '3' },
-        { name: '.combro', value: '4' },
-      ],
-    },
+    // {
+    //   name: 'domain',
+    //   type: 'lookup',
+    //   text: 'domain case',
+    //   data: [
+    //     { name: '.comodo', value: '1' },
+    //     { name: '.idomaret', value: '2' },
+    //     { name: '.net', value: '3' },
+    //     { name: '.combro', value: '4' },
+    //   ],
+    // },
     {
       name: 'country',
       type: 'lookup',
