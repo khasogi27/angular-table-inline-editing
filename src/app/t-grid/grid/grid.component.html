@@ -60,50 +60,54 @@
           [formGroup]="form"
           class="{{ fld.type == 'checkbox' ? 'py-0' : 'p-0' }}"
         >
-          <input
-            *ngIf="fld.type == 'input'"
-            type="text"
-            class="form-control rounded-0 border-outline"
-            formControlName="{{ fld.name }}"
-          />
-          <input
-            *ngIf="fld.type == 'checkbox'"
-            type="checkbox"
-            class="rounded-0 border-outline"
-            formControlName="{{ fld.name }}"
-          />
-          <select
-            *ngIf="fld.type == 'select'"
-            class="form-select"
-            formControlName="{{ fld.name }}"
-          >
-            <ng-container *ngFor="let opt of fld.data">
-              <option value="{{ opt.value }}">{{ opt.name }}</option>
-            </ng-container>
-          </select>
-          <div
-            *ngIf="fld.type == 'lookup'"
-            container="body"
-            class="w-100"
-            ngbDropdown
-            #myDrop="ngbDropdown"
-          >
+          <ng-template [ngIf]="fld.type == 'input'">
             <input
               type="text"
               class="form-control rounded-0 border-outline"
               formControlName="{{ fld.name }}"
-              (keyup)="onKeyupLookup($event, fld)"
-              (keyup)="myDrop.open()"
-              ngbDropdownToggle
             />
-            <div ngbDropdownMenu>
+          </ng-template>
+          <ng-template [ngIf]="fld.type == 'checkbox'">
+            <input
+              type="checkbox"
+              class="rounded-0 border-outline"
+              formControlName="{{ fld.name }}"
+            />
+          </ng-template>
+          <ng-template [ngIf]="fld.type == 'select'">
+            <select class="form-select" formControlName="{{ fld.name }}">
               <ng-container *ngFor="let opt of fld.data">
-                <button (click)="onClickLookup(opt, fld.name)" ngbDropdownItem>
-                  {{ opt.name }}
-                </button>
+                <option value="{{ opt.value }}">{{ opt.name }}</option>
               </ng-container>
+            </select>
+          </ng-template>
+          <ng-template [ngIf]="fld.type == 'lookup'">
+            <div
+              container="body"
+              class="w-100"
+              ngbDropdown
+              #myDrop="ngbDropdown"
+            >
+              <input
+                type="text"
+                class="form-control rounded-0 border-outline"
+                formControlName="{{ fld.name }}"
+                (keyup)="onKeyupLookup($event, fld)"
+                (keyup)="myDrop.open()"
+                ngbDropdownToggle
+              />
+              <div ngbDropdownMenu>
+                <ng-container *ngFor="let opt of fld.data">
+                  <button
+                    (click)="onClickLookup(opt, fld.name)"
+                    ngbDropdownItem
+                  >
+                    {{ opt.name }}
+                  </button>
+                </ng-container>
+              </div>
             </div>
-          </div>
+          </ng-template>
         </td>
       </ng-container>
     </tr>

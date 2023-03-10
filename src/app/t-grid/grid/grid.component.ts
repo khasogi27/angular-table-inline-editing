@@ -90,6 +90,7 @@ export class GridComponent implements OnChanges {
       this.form = this.fb.group(dsNewrow);
       return;
     }
+
     for (let item of this.dataSource) {
       let dsObj = {};
       for (let e of this.fieldType) {
@@ -107,7 +108,12 @@ export class GridComponent implements OnChanges {
     this.lookupOption = this.onBuildOption('lookup');
     this.selectOption = this.onBuildOption('select');
     for (let fld of this.fieldType) {
-      dsNewrow[fld.name] = new FormControl('');
+      if (fld.type == 'checkbox') {
+        dsNewrow[fld.name] = new FormControl('true');
+        dsNewrow[fld.name].defaultValue = false;
+      } else {
+        dsNewrow[fld.name] = new FormControl('');
+      }
     }
     this.form = this.fb.group(dsNewrow);
   }
@@ -117,15 +123,18 @@ export class GridComponent implements OnChanges {
     if (event.key == 'Enter') {
       this.showEditor = false;
       let formVal = this.form.value;
+      let formKey = {};
       formVal['isEdit'] = false;
       let isAddTable = true;
       if (this.statusAction == 'add') {
-        // if (this.dataKey != undefined) formVal[this.dataKey] = Date.now();
-        if (this.dataKey != undefined) formVal[this.dataKey] = this.uniqueId();
-        console.log(formVal[this.dataKey], '<<<');
+        if (this.dataKey != undefined) {
+          formKey[this.dataKey] = this.uniqueId();
+          formVal = { ...formKey, ...formVal };
+        }
         this.dsTable.splice(this.rowIdx, 0, formVal);
       } else {
-        formVal[this.dataKey] = this.dsTable[this.rowIdx - 1][this.dataKey];
+        formKey[this.dataKey] = this.dsTable[this.rowIdx - 1][this.dataKey];
+        formVal = { ...formKey, ...formVal };
         for (let i = 0; i < this.dsTable.length; i++) {
           if (this.dsTable[i][this.dataKey] == formVal[this.dataKey]) {
             this.dsTable[i] = formVal;
@@ -147,6 +156,7 @@ export class GridComponent implements OnChanges {
         this.tbodyEditor.nativeElement,
         this.trEditor.nativeElement
       );
+      console.log(formVal, '<<< formVal');
       return;
     }
     if (event.key == 'Escape') {
