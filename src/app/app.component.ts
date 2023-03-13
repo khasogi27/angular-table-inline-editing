@@ -60,21 +60,21 @@ export class AppComponent implements OnInit {
       type: 'input',
       text: 'name case',
     },
-    {
-      name: 'email',
-      type: 'input',
-      text: 'email case',
-    },
-    {
-      name: 'title',
-      type: 'select',
-      text: 'title case',
-      data: [
-        { name: 'Designer', value: '1' },
-        { name: 'Engineer', value: '2' },
-        { name: 'Support', value: '3' },
-      ],
-    },
+    // {
+    //   name: 'email',
+    //   type: 'input',
+    //   text: 'email case',
+    // },
+    // {
+    //   name: 'title',
+    //   type: 'select',
+    //   text: 'title case',
+    //   data: [
+    //     { name: 'Designer', value: '1' },
+    //     { name: 'Engineer', value: '2' },
+    //     { name: 'Support', value: '3' },
+    //   ],
+    // },
     // {
     //   name: 'domain',
     //   type: 'lookup',
@@ -112,9 +112,9 @@ export class AppComponent implements OnInit {
 
   public dsKey: string = 'userId';
 
-  public dsUser1: User[] | any = [];
+  public dsUser: User[] | any = [];
 
-  public dsUser: User[] | any = [
+  public dsUser1: User[] | any = [
     {
       userId: '56748fb3e3',
       name: 'Paweł',

@@ -62,10 +62,16 @@ export class GridComponent implements OnChanges {
     node?: any;
     action: string;
     icon: string;
+    isActive: boolean;
   }[] = [
-    { name: 'add', action: 'add', icon: this.dsIcon.addBefore },
-    { name: 'edit', action: 'edit', icon: this.dsIcon.edit },
-    { name: 'delete', action: 'delete', icon: this.dsIcon.delete },
+    { name: 'add', action: 'add', icon: this.dsIcon.addBefore, isActive: true },
+    { name: 'edit', action: 'edit', icon: this.dsIcon.edit, isActive: true },
+    {
+      name: 'delete',
+      action: 'delete',
+      icon: this.dsIcon.delete,
+      isActive: true,
+    },
   ];
   public form: FormGroup;
   public rowIdx: number = -1;
@@ -78,16 +84,7 @@ export class GridComponent implements OnChanges {
     let dsFilter = [];
     let dsNewrow = {};
     if (this.dataSource == null || this.dataSource.length == 0) {
-      for (let fld of this.fieldType) {
-        dsNewrow[fld.name] = '';
-        dsNewrow['isEdit'] = false;
-      }
-      if (this.dataSource == null) {
-        this.dataSource = [];
-        this.dsTable = [];
-      }
-      this.dsTable.push(dsNewrow);
-      this.form = this.fb.group(dsNewrow);
+      dsNewrow = this.updateRow('Init');
       return;
     }
 
@@ -156,8 +153,12 @@ export class GridComponent implements OnChanges {
         this.tbodyEditor.nativeElement,
         this.trEditor.nativeElement
       );
-      console.log(formVal, '<<< formVal');
+      if (this.dsTable[0][this.dataKey] == undefined) {
+        this.updateRow(event.key);
+        this.dsTable.splice(0, 1);
+      }
       return;
+      console.log(formVal, '<<< formVal');
     }
     if (event.key == 'Escape') {
       this.showEditor = false;
@@ -168,8 +169,8 @@ export class GridComponent implements OnChanges {
         this.tbodyEditor.nativeElement,
         this.trEditor.nativeElement
       );
+      return;
     }
-    return;
   }
 
   onFilterTbody(evnTd: any, evnTr: any, field: any, data: any) {
@@ -314,6 +315,9 @@ export class GridComponent implements OnChanges {
       if (!isCheckTv) {
         this.tableValue.push({ action, ...formVal });
       }
+      if (this.dsTable.length == 0) {
+        this.updateRow();
+      }
     }
   }
 
@@ -349,5 +353,33 @@ export class GridComponent implements OnChanges {
       .subscribe((v) => {
         this.trEditor.nativeElement.children[1].children[idx].focus();
       });
+  }
+
+  private updateRow(eventAct?: string) {
+    let isFilterAction = eventAct == "Enter" ? true : false;
+    for (let dd of this.dsDropdown) {
+      if (isFilterAction) {
+        dd.isActive = true;
+        continue;
+      }
+      if (dd.action == 'add') continue;
+      dd.isActive = false;
+    }
+    if (isFilterAction) return;
+
+    let dsNewrow = {};
+    for (let fld of this.fieldType) {
+      dsNewrow[fld.name] = '';
+      dsNewrow['isEdit'] = false;
+    }
+
+    if (this.dataSource == null) {
+      this.dataSource = [];
+      this.dsTable = [];
+    }
+
+    this.dsTable.push(dsNewrow);
+    this.form = this.fb.group(dsNewrow);
+    return dsNewrow;
   }
 }

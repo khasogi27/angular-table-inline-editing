@@ -24,6 +24,7 @@
             <div ngbDropdownMenu>
               <ng-container *ngFor="let dd of dsDropdown">
                 <button
+                  [disabled]="!dd.isActive"
                   ngbDropdownItem
                   (click)="onDropdownClick(trView, dd.action)"
                 >
