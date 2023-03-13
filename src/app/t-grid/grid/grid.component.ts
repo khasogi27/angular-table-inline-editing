@@ -84,7 +84,7 @@ export class GridComponent implements OnChanges {
     let dsFilter = [];
     let dsNewrow = {};
     if (this.dataSource == null || this.dataSource.length == 0) {
-      dsNewrow = this.updateRow(true);
+      dsNewrow = this.updateRow();
       return;
     }
 

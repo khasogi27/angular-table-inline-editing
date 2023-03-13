@@ -112,9 +112,9 @@ export class AppComponent implements OnInit {
 
   public dsKey: string = 'userId';
 
-  public dsUser: User[] | any = [];
+  public dsUser1: User[] | any = [];
 
-  public dsUser1: User[] | any = [
+  public dsUser: User[] | any = [
     {
       userId: '56748fb3e3',
       name: 'Paweł',
