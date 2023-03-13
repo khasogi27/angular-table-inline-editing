@@ -8,7 +8,7 @@ import {
   OnChanges,
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { interval, Subject, take } from 'rxjs';
 import { TablerIcon } from '../icons';
 
 export interface SelectOption {
@@ -264,6 +264,7 @@ export class GridComponent implements OnChanges {
           nextSibling
         );
       }
+      this.inputAutoFocus();
       this.statusAction = action;
     } else if (action == 'edit') {
       this.form.reset();
@@ -274,6 +275,7 @@ export class GridComponent implements OnChanges {
         this.trEditor.nativeElement,
         event.tr
       );
+      this.inputAutoFocus();
       this.rd.removeChild(this.tbodyView.nativeElement, event.tr);
       this.statusAction = action;
     } else if (action == 'delete') {
@@ -339,5 +341,13 @@ export class GridComponent implements OnChanges {
     return Math.floor(
       Math.random() * Math.floor(Math.random() * Date.now())
     ).toString(16);
+  }
+
+  private inputAutoFocus(idx = 0) {
+    interval(0)
+      .pipe(take(1))
+      .subscribe((v) => {
+        this.trEditor.nativeElement.children[1].children[idx].focus();
+      });
   }
 }
