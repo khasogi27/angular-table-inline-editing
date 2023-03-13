@@ -84,7 +84,7 @@ export class GridComponent implements OnChanges {
     let dsFilter = [];
     let dsNewrow = {};
     if (this.dataSource == null || this.dataSource.length == 0) {
-      dsNewrow = this.updateRow('Init');
+      dsNewrow = this.updateRow(true);
       return;
     }
 
@@ -154,12 +154,13 @@ export class GridComponent implements OnChanges {
         this.trEditor.nativeElement
       );
       if (this.dsTable[0][this.dataKey] == undefined) {
-        this.updateRow(event.key);
+        this.updateRow(true);
         this.dsTable.splice(0, 1);
       }
-      return;
       console.log(formVal, '<<< formVal');
+      return;
     }
+
     if (event.key == 'Escape') {
       this.showEditor = false;
       if (this.dsTable[this.rowIdx - 1] == undefined) return;
@@ -315,9 +316,7 @@ export class GridComponent implements OnChanges {
       if (!isCheckTv) {
         this.tableValue.push({ action, ...formVal });
       }
-      if (this.dsTable.length == 0) {
-        this.updateRow();
-      }
+      if (this.dsTable.length == 0) this.updateRow();
     }
   }
 
@@ -355,19 +354,18 @@ export class GridComponent implements OnChanges {
       });
   }
 
-  private updateRow(eventAct?: string) {
-    let isFilterAction = eventAct == "Enter" ? true : false;
+  private updateRow(allActive?: boolean) {
     for (let dd of this.dsDropdown) {
-      if (isFilterAction) {
+      if (allActive) {
         dd.isActive = true;
         continue;
       }
       if (dd.action == 'add') continue;
       dd.isActive = false;
     }
-    if (isFilterAction) return;
+    if (allActive) return;
 
-    let dsNewrow = {};
+    let dsNewrow: any = {};
     for (let fld of this.fieldType) {
       dsNewrow[fld.name] = '';
       dsNewrow['isEdit'] = false;
