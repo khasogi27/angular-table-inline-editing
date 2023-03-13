@@ -83,6 +83,7 @@ export class GridComponent implements OnChanges {
   ngOnChanges(): void {
     let dsFilter = [];
     let dsNewrow = {};
+    console.log(this.dataSource, '<<< this.dataSource');
     if (this.dataSource == null || this.dataSource.length == 0) {
       dsNewrow = this.updateRow();
       return;
