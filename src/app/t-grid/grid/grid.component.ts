@@ -11,6 +11,21 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { interval, Subject, take } from 'rxjs';
 import { TablerIcon } from '../icons';
 
+const Months = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sept',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
 export interface SelectOption {
   name: string;
   data: {
@@ -83,7 +98,6 @@ export class GridComponent implements OnChanges {
   ngOnChanges(): void {
     let dsFilter = [];
     let dsNewrow = {};
-    console.log(this.dataSource, '<<< this.dataSource');
     if (this.dataSource == null || this.dataSource.length == 0) {
       dsNewrow = this.updateRow();
       return;
@@ -94,6 +108,16 @@ export class GridComponent implements OnChanges {
       for (let e of this.fieldType) {
         if (this.dataKey != undefined) {
           dsObj[this.dataKey] = item[this.dataKey];
+        }
+        if (e.name == 'date') {
+          dsObj[e.name] = item[e.name];
+          const ofDate = item[e.name].split('-').reverse();
+          dsObj[e.name] = {
+            year: +ofDate[0],
+            month: +ofDate[1],
+            day: +ofDate[2],
+          };
+          continue;
         }
         dsObj[e.name] = item[e.name];
         dsObj['isEdit'] = false;
@@ -158,7 +182,6 @@ export class GridComponent implements OnChanges {
         this.updateRow(true);
         this.dsTable.splice(0, 1);
       }
-      console.log(formVal, '<<< formVal');
       return;
     }
 
@@ -176,6 +199,9 @@ export class GridComponent implements OnChanges {
   }
 
   onFilterTbody(evnTd: any, evnTr: any, field: any, data: any) {
+    if (field.type == 'date') {
+      return Object.values(data[field.name]).join('-');
+    }
     if (field.type == 'select') {
       for (let opt of this.selectOption) {
         for (let op of opt.data) {

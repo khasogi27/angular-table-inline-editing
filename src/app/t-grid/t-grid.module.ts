@@ -4,10 +4,13 @@ import { SaveSvgPipe } from './save-svg.pipe';
 import { TGridComponent } from './t-grid/t-grid.component';
 import { TbrGridComponent } from './tbr-grid/tbr-grid.component';
 import { TablerGridComponent } from './tabler-grid/tabler-grid.component';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomGridComponent } from './custom-grid/custom-grid.component';
 import { GridComponent } from './grid/grid.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import {
+  NgbDropdownModule,
+  NgbDatepickerModule,
+} from '@ng-bootstrap/ng-bootstrap';
 
 const COMPONSNTS: any[] = [
   TGridComponent,
@@ -17,12 +20,18 @@ const COMPONSNTS: any[] = [
   GridComponent,
 ];
 
+const MODULES: any[] = [
+  CommonModule,
+  NgbDropdownModule,
+  NgbDatepickerModule,
+  ReactiveFormsModule,
+];
+
 const PIPES: any[] = [SaveSvgPipe];
 
 @NgModule({
-  imports: [CommonModule, NgbDropdownModule, ReactiveFormsModule],
+  imports: [...MODULES],
   declarations: [...COMPONSNTS, ...PIPES],
   exports: [...COMPONSNTS],
 })
 export class TGridModule {}
-  

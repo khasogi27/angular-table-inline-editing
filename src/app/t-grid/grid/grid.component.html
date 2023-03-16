@@ -109,6 +109,16 @@
               </div>
             </div>
           </ng-template>
+          <ng-template [ngIf]="fld.type == 'date'">
+            <input
+              type="text"
+              class="form-control rounded-0 border-outline"
+              ngbDatepicker
+              #d="ngbDatepicker"
+              (click)="d.toggle()"
+              formControlName="{{ fld.name }}"
+            />
+          </ng-template>
         </td>
       </ng-container>
     </tr>

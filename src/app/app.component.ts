@@ -99,22 +99,22 @@ export class AppComponent implements OnInit {
       ],
     },
     {
+      name: 'date',
+      type: 'date',
+      text: 'date',
+    },
+    {
       name: 'contract',
       type: 'checkbox',
       text: 'admin case',
     },
-    // {
-    //   name: 'date',
-    //   type: 'date',
-    //   text: 'date',
-    // },
   ];
 
   public dsKey: string = 'userId';
 
-  public dsUser: User[] | any = [];
+  public dsUser1: User[] | any = [];
 
-  public dsUser1: User[] | any = [
+  public dsUser: User[] | any = [
     {
       userId: '56748fb3e3',
       name: 'Paweł',
@@ -131,7 +131,7 @@ export class AppComponent implements OnInit {
       title: '2',
       email: 'jlewzey1@seesaa.net',
       contract: false,
-      date: '20-10-1997',
+      date: '21-11-1998',
       domain: '.idomaret',
       country: 'indonesia',
     },
@@ -141,7 +141,7 @@ export class AppComponent implements OnInit {
       title: '3',
       email: 'mhulme2@domainmarket.com',
       contract: true,
-      date: '20-10-1997',
+      date: '22-12-1999',
       domain: '.net',
       country: 'italy',
     },
