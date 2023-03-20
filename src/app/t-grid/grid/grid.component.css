@@ -4,6 +4,12 @@
   border-bottom: inherit;
 }
 
+.custom-bg {
+  background-color: transparent;
+  border-left: transparent;
+  border-right: transparent;
+}
+
 .custom-td {
   padding: 0.55rem 0.55rem !important;
 }

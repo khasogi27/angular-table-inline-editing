@@ -10,7 +10,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {
   NgbDropdownModule,
   NgbDatepickerModule,
+NgbDateAdapter,
+NgbDateParserFormatter,
 } from '@ng-bootstrap/ng-bootstrap';
+import { CustomAdapter, CustomDateParserFormatter } from './custom-date.service';
 
 const COMPONSNTS: any[] = [
   TGridComponent,
@@ -33,5 +36,9 @@ const PIPES: any[] = [SaveSvgPipe];
   imports: [...MODULES],
   declarations: [...COMPONSNTS, ...PIPES],
   exports: [...COMPONSNTS],
+  providers: [
+    { provide: NgbDateAdapter, useClass: CustomAdapter },
+    { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
+  ],
 })
 export class TGridModule {}

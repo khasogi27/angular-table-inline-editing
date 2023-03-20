@@ -1,13 +1,16 @@
-<core-grid
-  #grid
-  [dataSource]="dsUser"
-  [dataKey]="dsKey"
-  [fieldType]="gridField"
->
-</core-grid>
+<div class="container-xl">
+  <core-grid
+    #grid
+    [dataSource]="dsUser"
+    [dataKey]="dsKey"
+    [fieldType]="gridField"
+    [backgroundType]="gridType"
+  >
+  </core-grid>
 
-<div *ngFor="let item of grid.tableValue">
-  <span>{{ item | json }}</span>
+  <div *ngFor="let item of grid.tableValue">
+    <span>{{ item | json }}</span>
+  </div>
 </div>
 
 <!-- <div class="page">

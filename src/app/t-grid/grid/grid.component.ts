@@ -6,12 +6,14 @@ import {
   ViewChild,
   HostListener,
   OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { interval, Subject, take } from 'rxjs';
 import { TablerIcon } from '../icons';
 
-const Months = [
+export const Months = [
   'Jan',
   'Feb',
   'Mar',
@@ -51,6 +53,8 @@ export interface FieldType {
   param?: any;
 }
 
+export type BackgroundType = 'flat' | 'normal';
+
 @Component({
   selector: 'core-grid',
   templateUrl: './grid.component.html',
@@ -65,6 +69,7 @@ export class GridComponent implements OnChanges {
   @Input() dataKey?: string;
   @Input() dataSource: any[] = [];
   @Input() fieldType: FieldType[] = [];
+  @Input() backgroundType?: BackgroundType = 'normal';
 
   public dsTable: any[] = [];
   public tableValue: { action: string }[] | any[] = [];
@@ -93,31 +98,27 @@ export class GridComponent implements OnChanges {
   public showEditor: boolean = false;
   public statusAction!: string;
 
-  constructor(private rd: Renderer2, private fb: FormBuilder) {}
+  constructor(
+    private rd: Renderer2,
+    private fb: FormBuilder,
+    private dateAdapter: NgbDateAdapter<string>
+  ) {}
 
-  ngOnChanges(): void {
-    let dsFilter = [];
-    let dsNewrow = {};
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['dataKey'] == undefined) this.updateRow(true);
     if (this.dataSource == null || this.dataSource.length == 0) {
-      dsNewrow = this.updateRow();
+      this.updateRow();
       return;
     }
+
+    let dsFilter: any[] = [];
+    let dsNewrow: any = {};
 
     for (let item of this.dataSource) {
       let dsObj = {};
       for (let e of this.fieldType) {
         if (this.dataKey != undefined) {
           dsObj[this.dataKey] = item[this.dataKey];
-        }
-        if (e.name == 'date') {
-          dsObj[e.name] = item[e.name];
-          const ofDate = item[e.name].split('-').reverse();
-          dsObj[e.name] = {
-            year: +ofDate[0],
-            month: +ofDate[1],
-            day: +ofDate[2],
-          };
-          continue;
         }
         dsObj[e.name] = item[e.name];
         dsObj['isEdit'] = false;
@@ -198,9 +199,10 @@ export class GridComponent implements OnChanges {
     }
   }
 
-  onFilterTbody(evnTd: any, evnTr: any, field: any, data: any) {
+  onFilterTbody(evnTd: any, field: any, data: any) {
     if (field.type == 'date') {
-      return Object.values(data[field.name]).join('-');
+      this.dateAdapter.toModel(data[field.name]);
+      return data[field.name];
     }
     if (field.type == 'select') {
       for (let opt of this.selectOption) {

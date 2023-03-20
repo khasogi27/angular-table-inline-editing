@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FieldType } from './t-grid/grid/grid.component';
+import { BackgroundType, FieldType } from './t-grid/grid/grid.component';
 
 // {
 //   userId: '56748fb3e3',
@@ -146,6 +146,8 @@ export class AppComponent implements OnInit {
       country: 'italy',
     },
   ];
+
+  public gridType: BackgroundType = 'flat';
 
   constructor() {}
 
