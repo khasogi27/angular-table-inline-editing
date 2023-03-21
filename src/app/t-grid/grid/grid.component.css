@@ -1,3 +1,7 @@
+.selected-row {
+  background-color: rgb(245, 235, 235);
+}
+
 .custom-thead {
   border: none;
   border-color: transparent;
