@@ -1,0 +1,40 @@
+<div class="table-responsive">
+  <table
+    #table
+    class="table table-vcenter table-nowrap table-bordered table-hover"
+  >
+    <thead class="custom-thead">
+      <tr>
+        <th class="bg-transparent w-1"></th>
+        <ng-container *ngFor="let fld of fieldType">
+          <th class="bg-transparent" [innerHTML]="fld.name"></th>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody
+      #tbodyView
+      class="rounded-0
+      {{ backgroundType == 'flat' ? 'custom-bg' : 'bg-white' }}"
+    >
+      <tr
+        #trView
+        *ngFor="let ds of dsTable; let i = index; trackBy: onTrackDs"
+        (click)="onRowClick(trView, ds, i)"
+        [class.selected-row]="i == rowIdx"
+      >
+        <td
+          role="button"
+          class="overflow-hidden p-0"
+          [innerHTML]="dsIcon.chevronRight | saveSvg"
+        ></td>
+        <ng-container *ngFor="let fld of fieldType">
+          <td
+            #tdView
+            class="custom-td"
+            [innerHTML]="onFilterTbody(tdView, ds, fld)"
+          ></td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>

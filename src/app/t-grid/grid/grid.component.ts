@@ -241,10 +241,6 @@ export class GridComponent implements OnChanges {
     }
   }
 
-  onFilterIcon() {
-    return this.dsIcon.moreVert;
-  }
-
   onClickLookup(e: any, fld: any) {
     let obj = { ...this.form.value };
     obj[fld] = e.name;

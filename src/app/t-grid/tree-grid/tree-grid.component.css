@@ -1,0 +1,9 @@
+.custom-thead {
+  border: none;
+  border-color: transparent;
+  border-bottom: inherit;
+}
+
+.custom-td {
+  padding: 0.55rem 0.55rem !important;
+}

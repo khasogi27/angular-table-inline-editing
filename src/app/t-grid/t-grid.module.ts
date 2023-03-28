@@ -10,10 +10,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {
   NgbDropdownModule,
   NgbDatepickerModule,
-NgbDateAdapter,
-NgbDateParserFormatter,
+  NgbDateAdapter,
+  NgbDateParserFormatter,
 } from '@ng-bootstrap/ng-bootstrap';
-import { CustomAdapter, CustomDateParserFormatter } from './custom-date.service';
+import {
+  CustomAdapter,
+  CustomDateParserFormatter,
+} from './custom-date.service';
+import { TreeGridComponent } from './tree-grid/tree-grid.component';
 
 const COMPONSNTS: any[] = [
   TGridComponent,
@@ -21,6 +25,7 @@ const COMPONSNTS: any[] = [
   TablerGridComponent,
   CustomGridComponent,
   GridComponent,
+  TreeGridComponent,
 ];
 
 const MODULES: any[] = [
