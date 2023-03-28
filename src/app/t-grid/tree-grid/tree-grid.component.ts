@@ -85,27 +85,34 @@ export class TreeGridComponent implements OnChanges {
   }
 
   onRowClick(evnTr: any, data: any, index: number) {
+    let parentIdx = evnTr.sectionRowIndex;
+    if (this.rowIdx == index) {
+      evnTr.nextSibling.remove();
+      return;
+    }
     this.rowIdx = index;
     let nextSibling = this.rd.nextSibling(evnTr);
     let crtTr = this.rd.createElement('tr');
 
     crtTr.addEventListener('click', (e) => {
+      let childSelect = e.target.parentNode.parentElement.sectionRowIndex;
+      let childIdx = e.target.parentNode.parentNode.rowIndex;
       nextSibling = this.rd.nextSibling(crtTr);
-      this.onRowClick(crtTr, data, index);
+      this.onRowClick(crtTr, data, childIdx);
     });
 
     let crtIcon = this.rd.createElement('td');
     crtIcon.innerHTML = this.dsIcon.chevronRight;
     this.rd.appendChild(crtTr, crtIcon);
     this.rowNode++;
+    if (this.countNode == 0) this.findCountChld(data);
     this.findChildren(crtTr, nextSibling, data);
-    this.findCountChld(data);
   }
 
   private findCountChld(data: any) {
     if (data.children != null) {
       for (let i = 0; i < data.children.length; i++) {
-        if (this.countNode == 0) this.countNode++;
+        this.countNode++;
         this.findCountChld(data.children[i]);
       }
     }
@@ -115,6 +122,7 @@ export class TreeGridComponent implements OnChanges {
     if (data.children != null) {
       for (let i = 0; i < data.children.length; i++) {
         if (node == this.rowNode) {
+          if (this.rowNode > this.countNode) return;
           let result = data.children[i];
           let crtTd = this.rd.createElement('td');
           let treeSpace = this.rowNode * 2 + 'rem';
