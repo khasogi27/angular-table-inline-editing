@@ -19,8 +19,8 @@
       <tr
         #trView
         *ngFor="let ds of dsTable; let i = index; trackBy: onTrackDs"
-        (click)="onRowClick(trView, ds, i)"
         [class.selected-row]="i == rowIdx"
+        (click)="onRowClick(trView, ds, i)"
       >
         <td
           role="button"
