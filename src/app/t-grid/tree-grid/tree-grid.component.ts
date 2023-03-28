@@ -105,7 +105,7 @@ export class TreeGridComponent implements OnChanges {
   private findCountChld(data: any) {
     if (data.children != null) {
       for (let i = 0; i < data.children.length; i++) {
-        this.countNode++;
+        if (this.countNode == 0) this.countNode++;
         this.findCountChld(data.children[i]);
       }
     }
