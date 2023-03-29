@@ -106,15 +106,6 @@ export class TreeGridComponent implements OnChanges {
     this.createChld(crtTr, nextSibling, data);
   }
 
-  private findCountChld(data: any) {
-    if (data.children != null) {
-      for (let i = 0; i < data.children.length; i++) {
-        this.countNode++;
-        this.findCountChld(data.children[i]);
-      }
-    }
-  }
-
   private createChld(crtTr: any, nextSb: any, data: any, node = 1) {
     if (data.children != null) {
       for (let i = 0; i < data.children.length; i++) {
@@ -138,48 +129,87 @@ export class TreeGridComponent implements OnChanges {
     }
   }
 
+  private findCountChld(data: any) {
+    if (data.children != null) {
+      for (let i = 0; i < data.children.length; i++) {
+        this.countNode++;
+        this.findCountChld(data.children[i]);
+      }
+    }
+  }
+
+  private findCountChild(data: any) {
+    if (data == undefined) return;
+    if (data.children != null) {
+      for (let i = 0; i <= this.rowNode; i++) {
+        this.findCountChild(data.children[i]);
+      }
+      this.countNode++;
+    }
+  }
+
+  private prevNode(evnTr: any) {
+    for (let i = 0; i < this.countNode; i++) {
+      evnTr.remove();
+      this.nextNode(evnTr.previousSibling);
+    }
+  }
+
+  private nextNode(evnTr: any) {
+    for (let i = 0; i <= this.countNode; i++) {
+      let parentId = evnTr.getAttribute('parent-id');
+      if (parentId == null) this.prevNode(evnTr);
+      this.nextNode(evnTr.nextSibling);
+    }
+  }
+
   onRowClicked(evnTr: any, data: any, index: number) {
     this.rowIdx = index;
-    let nextSibling = this.rd.nextSibling(evnTr);
+    let nextSb = this.rd.nextSibling(evnTr);
+    let parentId = evnTr.getAttribute('parent-id');
+    if (parentId != null) {
+      this.nextNode(evnTr);
+      this.rowNode = 0;
+    }
     let crtTr = this.rd.createElement('tr');
-
-    this.rd.listen(crtTr, 'click', (e) => {
-      let childIdx = e.target.parentNode.parentNode.rowIdx;
-      nextSibling = this.rd.nextSibling(crtTr);
-      this.onRowClicked(crtTr, data.children, childIdx);
-    });
-
     let crtIcon = this.rd.createElement('td');
     crtIcon.innerHTML = this.dsIcon.chevronRight;
     this.rd.appendChild(crtTr, crtIcon);
-    let result = data;
-    if (this.rowNode == 0) result = data.children;
+
+    this.rd.listen(crtTr, 'click', (e) => {
+      this.rowIdx = e.target.parentNode.parentNode.rowIndex;
+      let nextSbTree = this.rd.nextSibling(crtTr);
+      let crtTrTree = this.rd.createElement('tr');
+      let crtIconTree = this.rd.createElement('td');
+      crtIconTree.innerHTML = this.dsIcon.chevronRight;
+      this.rd.appendChild(crtTrTree, crtIconTree);
+
+      this.rowNode++;
+      this.createChild(crtTrTree, nextSbTree, data.children[0]);
+    });
+
     this.rowNode++;
-    this.createChild(crtTr, nextSibling, result);
+    this.createChild(crtTr, nextSb, data);
   }
 
-  createChild(crtTr: any, nextSb: any, data: any, node = 1) {
-    console.log(data, '<<< data');
-    if (data != null) {
-      let result = null;
-      for (let i = 0; i < data.length; i++) {
-        if (node == this.rowNode) {
-          result = data[i];
-          let crtTd = this.rd.createElement('td');
-          // let treeSpc = this.rowNode * 2 + 'rem';
-          // this.rd.setStyle(crtTd, 'padding-left', treeSpc);
-          for (let rs in result) {
-            // if (Array.isArray(result[rs])) break;
-            crtTd.innerHTML = result[rs];
-            this.rd.setAttribute(crtTd, 'parent-idx', this.rowNode.toString());
-            this.rd.appendChild(crtTr, crtTd);
-            crtTd = this.rd.createElement('td');
-          }
-          this.rd.insertBefore(this.tbodyView.nativeElement, crtTr, nextSb);
-          return;
-        }
-        this.createChld(crtTr, nextSb, result, this.rowNode);
+  private createChild(crtTr: any, nextSb: any, data: any, node = 1) {
+    for (let ch of data.children) {
+      this.findCountChild(data);
+      if (this.countNode == 0) return;
+      let crtTd = this.rd.createElement('td');
+      let treeSpace = this.rowNode * 2 + 'rem';
+      this.rd.setStyle(crtTd, 'padding-left', treeSpace);
+      for (let rs in ch) {
+        if (Array.isArray(ch[rs])) break;
+        crtTd.innerHTML = ch[rs];
+        this.rd.appendChild(crtTr, crtTd);
+        crtTd = this.rd.createElement('td');
       }
+      this.rd.insertBefore(this.tbodyView.nativeElement, crtTr, nextSb);
+      let prevSb = crtTr.previousSibling;
+      this.rd.setAttribute(prevSb, 'parent-id', this.countNode.toString());
+      this.countNode = 0;
+      return;
     }
   }
 
@@ -188,6 +218,9 @@ export class TreeGridComponent implements OnChanges {
   }
 
   onFilterTbody(evnTr: any, evnTd: any, data: any, fld: any) {
+    if (fld.type == 'label') {
+      return data[fld.name];
+    }
     if (fld.type == 'select') {
       for (let opt of this.selectOption) {
         for (let op of opt.data) {
@@ -196,9 +229,6 @@ export class TreeGridComponent implements OnChanges {
           }
         }
       }
-    }
-    if (fld.type == 'label') {
-      return data[fld.name];
     }
   }
 }
