@@ -60,7 +60,6 @@ export class TreeGridComponent implements OnChanges {
     }
 
     let dsFilter: any[] = [];
-
     for (let ds of this.dataSource) {
       let dsObj = {};
       for (let ft of this.fieldType) {
@@ -85,7 +84,6 @@ export class TreeGridComponent implements OnChanges {
   }
 
   onRowClick(evnTr: any, data: any, index: number) {
-    let parentIdx = evnTr.sectionRowIndex;
     if (this.rowIdx == index) {
       evnTr.nextSibling.remove();
       return;
@@ -94,8 +92,7 @@ export class TreeGridComponent implements OnChanges {
     let nextSibling = this.rd.nextSibling(evnTr);
     let crtTr = this.rd.createElement('tr');
 
-    crtTr.addEventListener('click', (e) => {
-      let childSelect = e.target.parentNode.parentElement.sectionRowIndex;
+    this.rd.listen(crtTr, 'click', (e) => {
       let childIdx = e.target.parentNode.parentNode.rowIndex;
       nextSibling = this.rd.nextSibling(crtTr);
       this.onRowClick(crtTr, data, childIdx);
@@ -106,7 +103,7 @@ export class TreeGridComponent implements OnChanges {
     this.rd.appendChild(crtTr, crtIcon);
     this.rowNode++;
     if (this.countNode == 0) this.findCountChld(data);
-    this.findChildren(crtTr, nextSibling, data);
+    this.createChld(crtTr, nextSibling, data);
   }
 
   private findCountChld(data: any) {
@@ -118,7 +115,7 @@ export class TreeGridComponent implements OnChanges {
     }
   }
 
-  private findChildren(crtTr: any, nextSibling: any, data: any, node = 1) {
+  private createChld(crtTr: any, nextSb: any, data: any, node = 1) {
     if (data.children != null) {
       for (let i = 0; i < data.children.length; i++) {
         if (node == this.rowNode) {
@@ -133,14 +130,55 @@ export class TreeGridComponent implements OnChanges {
             this.rd.appendChild(crtTr, crtTd);
             crtTd = this.rd.createElement('td');
           }
-          this.rd.insertBefore(
-            this.tbodyView.nativeElement,
-            crtTr,
-            nextSibling
-          );
+          this.rd.insertBefore(this.tbodyView.nativeElement, crtTr, nextSb);
           return;
         }
-        this.findChildren(crtTr, nextSibling, data.children[i], this.rowNode);
+        this.createChld(crtTr, nextSb, data.children[i], this.rowNode);
+      }
+    }
+  }
+
+  onRowClicked(evnTr: any, data: any, index: number) {
+    this.rowIdx = index;
+    let nextSibling = this.rd.nextSibling(evnTr);
+    let crtTr = this.rd.createElement('tr');
+
+    this.rd.listen(crtTr, 'click', (e) => {
+      let childIdx = e.target.parentNode.parentNode.rowIdx;
+      nextSibling = this.rd.nextSibling(crtTr);
+      this.onRowClicked(crtTr, data.children, childIdx);
+    });
+
+    let crtIcon = this.rd.createElement('td');
+    crtIcon.innerHTML = this.dsIcon.chevronRight;
+    this.rd.appendChild(crtTr, crtIcon);
+    let result = data;
+    if (this.rowNode == 0) result = data.children;
+    this.rowNode++;
+    this.createChild(crtTr, nextSibling, result);
+  }
+
+  createChild(crtTr: any, nextSb: any, data: any, node = 1) {
+    console.log(data, '<<< data');
+    if (data != null) {
+      let result = null;
+      for (let i = 0; i < data.length; i++) {
+        if (node == this.rowNode) {
+          result = data[i];
+          let crtTd = this.rd.createElement('td');
+          // let treeSpc = this.rowNode * 2 + 'rem';
+          // this.rd.setStyle(crtTd, 'padding-left', treeSpc);
+          for (let rs in result) {
+            // if (Array.isArray(result[rs])) break;
+            crtTd.innerHTML = result[rs];
+            this.rd.setAttribute(crtTd, 'parent-idx', this.rowNode.toString());
+            this.rd.appendChild(crtTr, crtTd);
+            crtTd = this.rd.createElement('td');
+          }
+          this.rd.insertBefore(this.tbodyView.nativeElement, crtTr, nextSb);
+          return;
+        }
+        this.createChld(crtTr, nextSb, result, this.rowNode);
       }
     }
   }
@@ -149,7 +187,7 @@ export class TreeGridComponent implements OnChanges {
     return Object.values(obj).join('');
   }
 
-  onFilterTbody(evnTr: any, data: any, fld: any) {
+  onFilterTbody(evnTr: any, evnTd: any, data: any, fld: any) {
     if (fld.type == 'select') {
       for (let opt of this.selectOption) {
         for (let op of opt.data) {

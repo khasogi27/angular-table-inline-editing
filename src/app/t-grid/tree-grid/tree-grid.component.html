@@ -20,7 +20,7 @@
         #trView
         *ngFor="let ds of dsTable; let i = index; trackBy: onTrackDs"
         [class.selected-row]="i == rowIdx"
-        (click)="onRowClick(trView, ds, i)"
+        (click)="onRowClicked(trView, ds, i)"
       >
         <td
           role="button"
@@ -31,7 +31,7 @@
           <td
             #tdView
             class="custom-td"
-            [innerHTML]="onFilterTbody(tdView, ds, fld)"
+            [innerHTML]="onFilterTbody(trView, tdView, ds, fld)"
           ></td>
         </ng-container>
       </tr>
