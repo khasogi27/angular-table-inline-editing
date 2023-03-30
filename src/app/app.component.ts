@@ -53,7 +53,7 @@ interface User {
 export class AppComponent implements OnInit {
   @ViewChild('grid') grid: any;
 
-  public gridField1: FieldType[] | any = [
+  public gridField: FieldType[] | any = [
     // {
     //   name: 'userId',
     //   type: 'label',
@@ -64,11 +64,11 @@ export class AppComponent implements OnInit {
       type: 'input',
       text: 'name case',
     },
-    {
-      name: 'email',
-      type: 'input',
-      text: 'email case',
-    },
+    // {
+    //   name: 'email',
+    //   type: 'input',
+    //   text: 'email case',
+    // },
     {
       name: 'title',
       type: 'select',
@@ -79,17 +79,17 @@ export class AppComponent implements OnInit {
         { name: 'Support', value: '3' },
       ],
     },
-    {
-      name: 'domain',
-      type: 'lookup',
-      text: 'domain case',
-      data: [
-        { name: '.comodo', value: '1' },
-        { name: '.idomaret', value: '2' },
-        { name: '.net', value: '3' },
-        { name: '.combro', value: '4' },
-      ],
-    },
+    // {
+    //   name: 'domain',
+    //   type: 'lookup',
+    //   text: 'domain case',
+    //   data: [
+    //     { name: '.comodo', value: '1' },
+    //     { name: '.idomaret', value: '2' },
+    //     { name: '.net', value: '3' },
+    //     { name: '.combro', value: '4' },
+    //   ],
+    // },
     {
       name: 'country',
       type: 'lookup',
@@ -102,11 +102,11 @@ export class AppComponent implements OnInit {
         { name: 'vrindavan', value: '4' },
       ],
     },
-    {
-      name: 'date',
-      type: 'date',
-      text: 'date',
-    },
+    // {
+    //   name: 'date',
+    //   type: 'date',
+    //   text: 'date',
+    // },
     {
       name: 'contract',
       type: 'checkbox',
@@ -114,7 +114,7 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  public gridField: FieldType[] | any = [
+  public treeGridField: FieldType[] | any = [
     // {
     //   name: 'userId',
     //   type: 'label',
@@ -175,11 +175,12 @@ export class AppComponent implements OnInit {
     // },
   ];
 
+  public dsTreeKey: string = 'userId';
   public dsKey: string = 'userId';
 
-  public dsUser1: User[] | any = [];
+  public dsTempUser: User[] | any = [];
 
-  public dsUser2: User[] | any = [
+  public dsUser: User[] | any = [
     {
       userId: '56748fb3e3',
       name: 'Paweł',
@@ -212,7 +213,7 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  public dsUser: User[] | any = [
+  public dsTreeUser: User[] | any = [
     {
       userId: '56748fb3e3',
       name: 'Paweł',
@@ -269,7 +270,8 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  public gridType: BackgroundType = 'flat';
+  public gridType: BackgroundType = 'normal';
+  public treeGridType: BackgroundType = 'flat';
 
   constructor() {}
 
