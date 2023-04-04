@@ -1,10 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SaveSvgPipe } from './save-svg.pipe';
-import { TGridComponent } from './t-grid/t-grid.component';
-import { TbrGridComponent } from './tbr-grid/tbr-grid.component';
-import { TablerGridComponent } from './tabler-grid/tabler-grid.component';
-import { CustomGridComponent } from './custom-grid/custom-grid.component';
 import { GridComponent } from './grid/grid.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -18,15 +14,9 @@ import {
   CustomDateParserFormatter,
 } from './custom-date.service';
 import { TreeGridComponent } from './tree-grid/tree-grid.component';
+import { TreeViewComponent } from './tree-view/tree-view.component';
 
-const COMPONSNTS: any[] = [
-  TGridComponent,
-  TbrGridComponent,
-  TablerGridComponent,
-  CustomGridComponent,
-  GridComponent,
-  TreeGridComponent,
-];
+const COMPONSNTS: any[] = [GridComponent, TreeGridComponent, TreeViewComponent];
 
 const MODULES: any[] = [
   CommonModule,

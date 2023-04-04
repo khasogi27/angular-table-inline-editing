@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { dsGridUser, dsTreeGridUser } from './t-grid/local-data';
+import { dsGridUser, dsTreeGridUser, dsTreeView } from './t-grid/local-data';
 // import { BackgroundType, FieldType } from './t-grid/grid/grid.component';
 import {
   BackgroundType,
@@ -152,11 +152,14 @@ export class AppComponent implements OnInit {
   public dsTreeUser: User[] | any;
   public treeGridType: BackgroundType = 'flat';
 
+  public dsTreeView: any[];
+
   constructor() {}
 
   ngOnInit(): void {
     this.dsUser = dsGridUser;
     this.dsTreeUser = dsTreeGridUser;
+    this.dsTreeView = dsTreeView;
   }
 
   onSaveClick() {

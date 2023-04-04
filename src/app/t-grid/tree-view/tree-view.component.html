@@ -1,0 +1,35 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Permissions</h3>
+  </div>
+  <div class="list-group list-group-flush">
+    <ng-container
+      *ngFor="let node of dataSource"
+      [ngTemplateOutlet]="treeNode"
+      [ngTemplateOutletContext]="{ $implicit: node }"
+    >
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #treeNode let-data>
+  <div class="list-group-item border-0 mt-3">
+    <div class="row align-items-center" (click)="onRowClick()">
+      <div class="col-auto"><span class="badge bg-red"></span></div>
+      <div class="col text-truncate">
+        <div class="d-block text-muted text-truncate mt-n1">
+          {{ data.name }}
+        </div>
+      </div>
+      <div class="col-auto">
+        <a [innerHTML]="dsIcon.checkbox | saveSvg"></a>
+      </div>
+    </div>
+    <ng-container
+      *ngFor="let child of data.children"
+      [ngTemplateOutlet]="treeNode"
+      [ngTemplateOutletContext]="{ $implicit: child }"
+    >
+    </ng-container>
+  </div>
+</ng-template>

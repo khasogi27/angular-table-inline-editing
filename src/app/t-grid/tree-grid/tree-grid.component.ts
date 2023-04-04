@@ -173,6 +173,7 @@ export class TreeGridComponent implements OnChanges {
     }
     let crtTr = this.rd.createElement('tr');
     let crtIcon = this.rd.createElement('td');
+    this.rd.setAttribute(crtIcon, 'class', 'p-0');
     crtIcon.innerHTML = this.dsIcon.chevronRight;
     this.rd.appendChild(crtTr, crtIcon);
 
@@ -197,11 +198,17 @@ export class TreeGridComponent implements OnChanges {
       this.findCountChild(data);
       if (this.countNode == 0) return;
       let crtTd = this.rd.createElement('td');
-      let treeSpace = this.rowNode * 2 + 'rem';
-      this.rd.setStyle(crtTd, 'padding-left', treeSpace);
+      // let treeSpace = this.rowNode * 2 + 'rem';
+      // this.rd.setStyle(crtTd, 'padding-left', treeSpace);
+      this.rd.setAttribute(crtTd, 'class', 'custom-td');
+      let nbsp = '\u00a0 \u00a0 \u00a0';
+      let treeNbsp = nbsp;
+      for (let i = 0; i < this.rowNode; i++) {
+        treeNbsp += nbsp;
+      }
       for (let rs in ch) {
         if (Array.isArray(ch[rs])) break;
-        crtTd.innerHTML = ch[rs];
+        crtTd.innerHTML = treeNbsp + ch[rs];
         this.rd.appendChild(crtTr, crtTd);
         crtTd = this.rd.createElement('td');
       }
