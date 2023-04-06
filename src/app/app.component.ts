@@ -153,6 +153,7 @@ export class AppComponent implements OnInit {
   public treeGridType: BackgroundType = 'flat';
 
   public dsTreeView: any[];
+  public dsExpanded: boolean = false;
 
   constructor() {}
 

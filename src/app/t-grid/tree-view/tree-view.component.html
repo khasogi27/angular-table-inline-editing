@@ -4,18 +4,29 @@
   </div>
   <div class="list-group list-group-flush">
     <ng-container
-      *ngFor="let node of dataSource"
+      *ngFor="let parent of dsTreeView"
       [ngTemplateOutlet]="treeNode"
-      [ngTemplateOutletContext]="{ $implicit: node }"
+      [ngTemplateOutletContext]="{ $implicit: parent }"
     >
     </ng-container>
   </div>
 </div>
 
 <ng-template #treeNode let-data>
-  <div class="list-group-item border-0 mt-3">
-    <div class="row align-items-center" (click)="onRowClick()">
-      <div class="col-auto"><span class="badge bg-red"></span></div>
+  <div class="list-group-item border-0 mt-3" role="button">
+    <div
+      class="row align-items-center"
+      (contextmenu)="onRightClick($event, data)"
+    >
+      <div class="col-auto px-0" (click)="data.expand = !data.expand">
+        <ng-container *ngIf="data.children">
+          <a *ngIf="data.expand" [innerHTML]="dsIcon.chevronDown | saveSvg"></a>
+          <a
+            *ngIf="!data.expand"
+            [innerHTML]="dsIcon.chevronRight | saveSvg"
+          ></a>
+        </ng-container>
+      </div>
       <div class="col text-truncate">
         <div class="d-block text-muted text-truncate mt-n1">
           {{ data.name }}
@@ -25,11 +36,13 @@
         <a [innerHTML]="dsIcon.checkbox | saveSvg"></a>
       </div>
     </div>
-    <ng-container
-      *ngFor="let child of data.children"
-      [ngTemplateOutlet]="treeNode"
-      [ngTemplateOutletContext]="{ $implicit: child }"
-    >
+    <ng-container *ngIf="data.expand">
+      <ng-container
+        *ngFor="let child of data.children"
+        [ngTemplateOutlet]="treeNode"
+        [ngTemplateOutletContext]="{ $implicit: child }"
+      >
+      </ng-container>
     </ng-container>
   </div>
 </ng-template>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TablerIcon } from '../icons';
 
 @Component({
@@ -6,26 +6,30 @@ import { TablerIcon } from '../icons';
   templateUrl: './tree-view.component.html',
   styleUrls: ['./tree-view.component.css'],
 })
-export class TreeViewComponent implements OnInit {
+export class TreeViewComponent implements OnChanges {
   @Input() dataSource: any[] = [];
+  @Input() expanded: boolean = true;
 
   public dsIcon: any = TablerIcon;
-  public dsTreeView: any[] = [
-    {
-      name: 'admin',
-      access: 1,
-    },
-    {
-      name: 'hr',
-      access: 2,
-    },
-    {
-      name: 'employee',
-      access: 1,
-    },
-  ];
+  public dsTreeView: any = [];
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnChanges(changes: SimpleChanges): void {
+    this.dsTreeView = this.dataSource;
+    this.addValueChange(this.dsTreeView);
+  }
+
+  addValueChange(data: any) {
+    for (let item of data) {
+      item['expand'] = this.expanded;
+      if (item.children == undefined) return;
+      this.addValueChange(item.children);
+    }
+  }
+
+  onRightClick(evn: any, data: any) {
+    console.log(this.dsTreeView, '<<<');
+    evn.preventDefault();
+  }
 }

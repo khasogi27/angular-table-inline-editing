@@ -67,6 +67,7 @@ export const dsTreeView = [
   {
     name: 'IT',
     access: 1,
+    children: [],
   },
   {
     name: 'Finance',
@@ -75,7 +76,6 @@ export const dsTreeView = [
       {
         name: 'Employee',
         access: 1,
-        children: [],
       },
     ],
   },
