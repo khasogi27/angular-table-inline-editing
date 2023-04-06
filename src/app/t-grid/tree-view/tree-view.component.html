@@ -13,26 +13,33 @@
 </div>
 
 <ng-template #treeNode let-data>
-  <div class="list-group-item border-0 mt-3" role="button">
+  <div class="list-group-item border-0 {{ data['parent'] ? 'pe-3' : 'pe-0' }}">
     <div
-      class="row align-items-center"
+      class="row align-items-center mb-2"
       (contextmenu)="onRightClick($event, data)"
     >
-      <div class="col-auto px-0" (click)="data.expand = !data.expand">
-        <ng-container *ngIf="data.children">
+      <div
+        class="col-auto px-0"
+        (click)="data.expand = !data.expand"
+        role="button"
+      >
+        <ng-container *ngIf="data.children; else notChild">
           <a *ngIf="data.expand" [innerHTML]="dsIcon.chevronDown | saveSvg"></a>
           <a
             *ngIf="!data.expand"
             [innerHTML]="dsIcon.chevronRight | saveSvg"
           ></a>
         </ng-container>
+        <ng-template #notChild>
+          <div>&nbsp; &nbsp;</div>
+        </ng-template>
       </div>
       <div class="col text-truncate">
         <div class="d-block text-muted text-truncate mt-n1">
           {{ data.name }}
         </div>
       </div>
-      <div class="col-auto">
+      <div class="col-auto" role="button">
         <a [innerHTML]="dsIcon.checkbox | saveSvg"></a>
       </div>
     </div>

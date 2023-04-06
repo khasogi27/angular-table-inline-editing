@@ -18,6 +18,9 @@ export class TreeViewComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.dsTreeView = this.dataSource;
     this.addValueChange(this.dsTreeView);
+    for (let item of this.dsTreeView) {
+      item['parent'] = true;
+    }
   }
 
   addValueChange(data: any) {
