@@ -20,17 +20,17 @@
     >
       <div
         class="col-auto px-0"
-        (click)="data.expand = !data.expand"
         role="button"
+        (click)="data.expand = !data.expand"
       >
-        <ng-container *ngIf="data.children; else notChild">
+        <ng-container *ngIf="data.children; else deepChild">
           <a *ngIf="data.expand" [innerHTML]="dsIcon.chevronDown | saveSvg"></a>
           <a
             *ngIf="!data.expand"
             [innerHTML]="dsIcon.chevronRight | saveSvg"
           ></a>
         </ng-container>
-        <ng-template #notChild>
+        <ng-template #deepChild>
           <div>&nbsp; &nbsp;</div>
         </ng-template>
       </div>
