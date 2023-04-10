@@ -35,30 +35,10 @@ export class TreeViewComponent implements OnChanges {
 
       for (let dd of this.dsDropdown) if (dd.name == perm) continue;
       this.dsDropdown.push({ name: perm, value: i, path });
-      // this.dsTreeOption.push({ value: i, path });
+      this.dsTreeOption.push({ value: i, path });
     });
 
-    arrPath.find((f, i) => {
-      let nodePath = f.split('/');
-      for (let np of nodePath) {
-        this.createTree(np);
-      }
-    });
-
-    console.log(this.dsTreeOption, '<<<');
-  }
-
-  createTree(data) {
-    for (let item of this.dsTreeOption) {
-      console.log(item['name'], 'nih');
-      if (item['name'] == null) {
-        this.dsTreeOption.push({ name: data });
-      } else if (item['children'] == null) {
-        item['children'] = data;
-      } else {
-        continue;
-      }
-    }
+    console.log(this.dsTreeView, 'dsTreeView');
   }
 
   addValueChange(data: any) {
@@ -69,13 +49,8 @@ export class TreeViewComponent implements OnChanges {
     }
   }
 
-  onRightClick(evn: any, data: any) {
-    evn.preventDefault();
-    for (let item of this.dsTreeOption) {
-      if (item.value == data.value) {
-        item = data;
-      }
-    }
-    // console.log(this.dsTreeOption, '<<<');
+  onRightClick(evn: any, data: any, select: string) {
+    data['perm'] = select;
+    console.log(this.dsTreeView, '<<<');
   }
 }

@@ -41,8 +41,8 @@
           <ng-template ngFor let-dd [ngForOf]="dsDropdown">
             <option
               [value]="dd.value"
-              [selected]="dd.value == data.access"
-              (click)="onRightClick($event, dd)"
+              [selected]="dd.name == data.perm"
+              (click)="onRightClick($event, data, dd.name)"
             >
               {{ dd.name }}
             </option>

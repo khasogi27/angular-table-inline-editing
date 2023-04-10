@@ -52,6 +52,11 @@ export const dsTreeView = [
       {
         name: 'users',
       },
+    ],
+  },
+  {
+    name: 'admin',
+    children: [
       {
         name: 'user',
       },
