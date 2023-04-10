@@ -14,7 +14,7 @@ export class TreeViewComponent implements OnChanges {
   public dsIcon: any = TablerIcon;
   public dsTreeView: any[] = [];
   public dsDropdown: any[] = [];
-  public dsTreeOption: any[] = [];
+  public dsPathValue: any[] = [];
 
   constructor() {}
 
@@ -34,11 +34,8 @@ export class TreeViewComponent implements OnChanges {
       arrPath.push(path);
 
       for (let dd of this.dsDropdown) if (dd.name == perm) continue;
-      this.dsDropdown.push({ name: perm, value: i, path });
-      this.dsTreeOption.push({ value: i, path });
+      this.dsDropdown.push({ perm, value: i, path });
     });
-
-    console.log(this.dsTreeView, 'dsTreeView');
   }
 
   addValueChange(data: any) {
@@ -51,6 +48,28 @@ export class TreeViewComponent implements OnChanges {
 
   onRightClick(evn: any, data: any, select: string) {
     data['perm'] = select;
-    console.log(this.dsTreeView, '<<<');
+    this.findChild(data, select);
+  }
+
+  findChild(data: any, select: any) {
+    for (let item of data.children) {
+      item['perm'] = select;
+      if (item.children == undefined) return;
+      this.findChild(data, select);
+    }
+  }
+
+  onSave() {
+    this.findNode(this.dsTreeView);
+  }
+
+  findNode(data: any) {
+    for (let item of data.children) {
+      if (item['children'] == undefined) {
+        console.log(item.path);
+        return;
+      }
+      this.findNode(item);
+    }
   }
 }

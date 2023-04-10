@@ -32,33 +32,45 @@ export const dsGridUser = [
 ];
 
 export const dsPath = [
-  '/app/master/manpower#Various-Access',
-  '/app/admin/users#Full-Control',
-  '/app/admin/user#Read-Only',
+  '/app/master/manpower#Mixx',
+  '/app/admin/users#Full',
+  '/app/admin/user#Read',
 ];
 
 export const dsTreeView = [
   {
     name: 'master',
+    path: '/app/master/manpower',
+    perm: 1,
     children: [
       {
         name: 'manpower',
+        path: '/app/master/manpower',
+        perm: 1,
       },
     ],
   },
   {
     name: 'admin',
+    path: '/app/admin/users',
+    perm: 0,
     children: [
       {
         name: 'users',
+        path: '/app/admin/users',
+        perm: 0,
       },
     ],
   },
   {
     name: 'admin',
+    path: '/app/admin/user',
+    perm: 2,
     children: [
       {
         name: 'user',
+        path: '/app/admin/user',
+        perm: 2,
       },
     ],
   },
