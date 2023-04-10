@@ -14,10 +14,7 @@
 
 <ng-template #treeNode let-data>
   <div class="list-group-item border-0 {{ data['parent'] ? 'pe-3' : 'pe-0' }}">
-    <div
-      class="row align-items-center mb-2"
-      (contextmenu)="onRightClick($event, data)"
-    >
+    <div class="row align-items-center mb-2">
       <div
         class="col-auto px-0"
         role="button"
@@ -39,8 +36,18 @@
           {{ data.name }}
         </div>
       </div>
-      <div class="col-auto" role="button">
-        <a [innerHTML]="dsIcon.checkbox | saveSvg"></a>
+      <div class="col-auto">
+        <select class="form-select">
+          <ng-template ngFor let-dd [ngForOf]="dsDropdown">
+            <option
+              [value]="dd.value"
+              [selected]="dd.value == data.access"
+              (click)="onRightClick($event, dd)"
+            >
+              {{ dd.name }}
+            </option>
+          </ng-template>
+        </select>
       </div>
     </div>
     <ng-container *ngIf="data.expand">

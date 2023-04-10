@@ -31,18 +31,24 @@ export const dsGridUser = [
   },
 ];
 
+export const dsPath = [
+  '/app/master/manpower#Various-Access',
+  '/app/admin/users#Full-Control',
+  '/app/admin/user#Read-Only',
+];
+
 export const dsTreeView = [
   {
     name: 'Admin',
-    access: 1,
+    access: 2,
     children: [
       {
         name: 'Employee',
-        access: 1,
+        access: 2,
         children: [
           {
             name: 'User',
-            access: 1,
+            access: 2,
           },
         ],
       },
@@ -66,16 +72,16 @@ export const dsTreeView = [
   },
   {
     name: 'IT',
-    access: 1,
+    access: 0,
     children: [],
   },
   {
     name: 'Finance',
-    access: 1,
+    access: 0,
     children: [
       {
         name: 'Employee',
-        access: 1,
+        access: 0,
       },
     ],
   },

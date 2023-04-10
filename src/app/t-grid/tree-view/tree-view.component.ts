@@ -9,9 +9,11 @@ import { TablerIcon } from '../icons';
 export class TreeViewComponent implements OnChanges {
   @Input() dataSource: any[] = [];
   @Input() expanded: boolean = true;
+  @Input() dataSelect: any[] = [];
 
   public dsIcon: any = TablerIcon;
-  public dsTreeView: any = [];
+  public dsTreeView: any[] = [];
+  public dsDropdown: any[] = [];
 
   constructor() {}
 
@@ -21,6 +23,18 @@ export class TreeViewComponent implements OnChanges {
     for (let item of this.dsTreeView) {
       item['parent'] = true;
     }
+
+    if (this.dataSelect.length == 0) return;
+    this.dataSelect.find((ds, i) => {
+      let splitOf = ds.split('#');
+      let perm = splitOf[1];
+      let path = splitOf[0];
+
+      for (let dd of this.dsDropdown) if (dd.name == perm) continue;
+      this.dsDropdown.push({ name: perm, value: i, path });
+    });
+
+    console.log(this.dsDropdown, '<<<');
   }
 
   addValueChange(data: any) {
@@ -32,6 +46,7 @@ export class TreeViewComponent implements OnChanges {
   }
 
   onRightClick(evn: any, data: any) {
+    console.log(data, 'data');
     console.log(this.dsTreeView, '<<<');
     evn.preventDefault();
   }
