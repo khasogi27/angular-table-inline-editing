@@ -14,6 +14,7 @@ export class TreeViewComponent implements OnChanges {
   public dsIcon: any = TablerIcon;
   public dsTreeView: any[] = [];
   public dsDropdown: any[] = [];
+  public dsTreeOption: any[] = [];
 
   constructor() {}
 
@@ -25,16 +26,39 @@ export class TreeViewComponent implements OnChanges {
     }
 
     if (this.dataSelect.length == 0) return;
+    let arrPath = [];
     this.dataSelect.find((ds, i) => {
       let splitOf = ds.split('#');
       let perm = splitOf[1];
       let path = splitOf[0];
+      arrPath.push(path);
 
       for (let dd of this.dsDropdown) if (dd.name == perm) continue;
       this.dsDropdown.push({ name: perm, value: i, path });
+      // this.dsTreeOption.push({ value: i, path });
     });
 
-    console.log(this.dsDropdown, '<<<');
+    arrPath.find((f, i) => {
+      let nodePath = f.split('/');
+      for (let np of nodePath) {
+        this.createTree(np);
+      }
+    });
+
+    console.log(this.dsTreeOption, '<<<');
+  }
+
+  createTree(data) {
+    for (let item of this.dsTreeOption) {
+      console.log(item['name'], 'nih');
+      if (item['name'] == null) {
+        this.dsTreeOption.push({ name: data });
+      } else if (item['children'] == null) {
+        item['children'] = data;
+      } else {
+        continue;
+      }
+    }
   }
 
   addValueChange(data: any) {
@@ -46,8 +70,12 @@ export class TreeViewComponent implements OnChanges {
   }
 
   onRightClick(evn: any, data: any) {
-    console.log(data, 'data');
-    console.log(this.dsTreeView, '<<<');
     evn.preventDefault();
+    for (let item of this.dsTreeOption) {
+      if (item.value == data.value) {
+        item = data;
+      }
+    }
+    // console.log(this.dsTreeOption, '<<<');
   }
 }

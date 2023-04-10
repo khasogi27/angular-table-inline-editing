@@ -39,6 +39,28 @@ export const dsPath = [
 
 export const dsTreeView = [
   {
+    name: 'master',
+    children: [
+      {
+        name: 'manpower',
+      },
+    ],
+  },
+  {
+    name: 'admin',
+    children: [
+      {
+        name: 'users',
+      },
+      {
+        name: 'user',
+      },
+    ],
+  },
+];
+
+export const dsTreeView1 = [
+  {
     name: 'Admin',
     access: 2,
     children: [
