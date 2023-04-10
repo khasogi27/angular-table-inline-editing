@@ -58,18 +58,4 @@ export class TreeViewComponent implements OnChanges {
       this.findChild(data, select);
     }
   }
-
-  onSave() {
-    this.findNode(this.dsTreeView);
-  }
-
-  findNode(data: any) {
-    for (let item of data.children) {
-      if (item['children'] == undefined) {
-        console.log(item.path);
-        return;
-      }
-      this.findNode(item);
-    }
-  }
 }
