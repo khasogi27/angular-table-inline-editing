@@ -50,7 +50,7 @@ export class TreeViewComponent implements OnChanges {
     this.findChild(data, select);
   }
 
-  findChild(data: any, select: any) {
+  private findChild(data: any, select: any) {
     for (let item of data.children) {
       item['perm'] = select;
       if (item.children == undefined) return;
@@ -59,16 +59,18 @@ export class TreeViewComponent implements OnChanges {
   }
 
   onSaveClick() {
-    this.dsPathValue = this.dsTreeView;
-    console.log(this.dsTreeView, 'this.dsTreeView');
-    console.log(this.dataSource, 'this.dataSource');
+    if (this.dsPathValue.length != 0) this.dsPathValue = [];
+
+    let result = this.dsTreeView.map((item: any) => {
+      let namePerm = item.perm == 0 ? 'Mixx' : item.perm == 1 ? 'Full' : 'Read';
+      return item.path + '#' + namePerm;
+    });
+    this.dsPathValue = result;
   }
 
   onCancelClick() {
     this.buildDs();
     this.dsPathValue = this.dsTreeView;
-    console.log(this.dsTreeView, 'this.dsTreeView');
-    console.log(this.dataSource, 'this.dataSource');
   }
 
   private buildDs() {
