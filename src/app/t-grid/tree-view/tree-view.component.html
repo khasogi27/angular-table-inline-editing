@@ -10,6 +10,7 @@
     >
     </ng-container>
   </div>
+  <ng-template [ngTemplateOutlet]="outletFooter"></ng-template>
 </div>
 
 <ng-template #treeNode let-data>
@@ -42,7 +43,7 @@
             <option
               [value]="dd.value"
               [selected]="dd.value == data.perm"
-              (click)="onRightClick($event, data, dd.value)"
+              (click)="onRightClick(data, dd.value)"
             >
               {{ dd.perm }}
             </option>
@@ -58,5 +59,14 @@
       >
       </ng-container>
     </ng-container>
+  </div>
+</ng-template>
+
+<ng-template #outletFooter>
+  <div class="card-footer">
+    <div class="d-flex">
+      <a class="btn btn-ghost-primary me-3" (click)="onSaveClick()">Save</a>
+      <a class="btn btn-link" (click)="onCancelClick()">Cancel</a>
+    </div>
   </div>
 </ng-template>

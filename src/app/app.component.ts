@@ -28,6 +28,7 @@ interface User {
 export class AppComponent implements OnInit {
   @ViewChild('grid') grid: any;
   @ViewChild('treegrid') treegrid: any;
+  @ViewChild('treeview') treeview: any;
 
   public gridField: FieldType[] | any = [
     // {
@@ -171,7 +172,8 @@ export class AppComponent implements OnInit {
   }
 
   onSaveClick() {
-    console.log(this.grid.tableValue, '<<< grid');
+    // console.log(this.grid.tableValue, '<<< grid');
+    console.log(this.treeview.dsPathValue, '<<< treeview');
     // this.grid.newData$.subscribe((e) => {
     //   console.log(e, '<<< event');
     //   // this.grid.newData$.complete();

@@ -19,11 +19,9 @@ export class TreeViewComponent implements OnChanges {
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.dsTreeView = this.dataSource;
+    this.buildDs();
     this.addValueChange(this.dsTreeView);
-    for (let item of this.dsTreeView) {
-      item['parent'] = true;
-    }
+    this.dsTreeView.map((item) => (item['parent'] = true));
 
     if (this.dataSelect.length == 0) return;
     let arrPath = [];
@@ -46,8 +44,9 @@ export class TreeViewComponent implements OnChanges {
     }
   }
 
-  onRightClick(evn: any, data: any, select: string) {
+  onRightClick(data: any, select: string) {
     data['perm'] = select;
+    if (data.children == undefined) return;
     this.findChild(data, select);
   }
 
@@ -57,5 +56,23 @@ export class TreeViewComponent implements OnChanges {
       if (item.children == undefined) return;
       this.findChild(data, select);
     }
+  }
+
+  onSaveClick() {
+    this.dsPathValue = this.dsTreeView;
+    console.log(this.dsTreeView, 'this.dsTreeView');
+    console.log(this.dataSource, 'this.dataSource');
+  }
+
+  onCancelClick() {
+    this.buildDs();
+    this.dsPathValue = this.dsTreeView;
+    console.log(this.dsTreeView, 'this.dsTreeView');
+    console.log(this.dataSource, 'this.dataSource');
+  }
+
+  private buildDs() {
+    this.dsTreeView = [];
+    this.dataSource.map((ds) => this.dsTreeView.push(ds));
   }
 }

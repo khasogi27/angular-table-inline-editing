@@ -92,6 +92,11 @@ export const TablerIcon: any = {
       <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
       <path d="M10 12l4 4m0 -4l-4 4"></path>
     </svg>`,
+  cancel: `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-x" width="40" height="40" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+      <circle cx="12" cy="12" r="9"></circle>
+      <path d="M10 10l4 4m0 -4l-4 4"></path>
+    </svg>`,
   addBefore: `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
     <path d="M9 12h6"></path>
