@@ -19,7 +19,7 @@ export class TreeViewComponent implements OnChanges {
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.buildDs();
+    this.dsTreeView = this.dataSource;
     this.addValueChange(this.dsTreeView);
     this.dsTreeView.map((item) => (item['parent'] = true));
 
@@ -32,7 +32,8 @@ export class TreeViewComponent implements OnChanges {
       arrPath.push(path);
 
       for (let dd of this.dsDropdown) if (dd.name == perm) continue;
-      this.dsDropdown.push({ perm, value: i, path });
+      let ddValue = perm == 'Mixx' ? 0 : perm == 'Full' ? 1 : 2;
+      this.dsDropdown.push({ perm, value: ddValue, path });
     });
   }
 
@@ -69,12 +70,7 @@ export class TreeViewComponent implements OnChanges {
   }
 
   onCancelClick() {
-    this.buildDs();
-    this.dsPathValue = this.dsTreeView;
-  }
-
-  private buildDs() {
-    this.dsTreeView = [];
-    this.dataSource.map((ds) => this.dsTreeView.push(ds));
+    this.dsTreeView = this.dataSource;
+    this.dsPathValue = this.dataSelect;
   }
 }

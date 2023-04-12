@@ -41,24 +41,24 @@ export const dsTreeView = [
   {
     name: 'master',
     path: '/app/master/manpower',
-    perm: 1,
+    perm: 0,
     children: [
       {
         name: 'manpower',
         path: '/app/master/manpower',
-        perm: 1,
+        perm: 0,
       },
     ],
   },
   {
     name: 'admin',
     path: '/app/admin/users',
-    perm: 0,
+    perm: 1,
     children: [
       {
         name: 'users',
         path: '/app/admin/users',
-        perm: 0,
+        perm: 1,
       },
     ],
   },
