@@ -1,10 +1,12 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { animatedToggleTree } from '../animated-tree';
 import { TablerIcon } from '../icons';
 
 @Component({
   selector: 'core-tree-view',
   templateUrl: './tree-view.component.html',
   styleUrls: ['./tree-view.component.css'],
+  animations: [animatedToggleTree('toggleTree')],
 })
 export class TreeViewComponent implements OnChanges {
   @Input() dataSource: any[] = [];

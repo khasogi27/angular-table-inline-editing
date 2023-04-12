@@ -15,6 +15,7 @@ import {
 } from './custom-date.service';
 import { TreeGridComponent } from './tree-grid/tree-grid.component';
 import { TreeViewComponent } from './tree-view/tree-view.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const COMPONSNTS: any[] = [GridComponent, TreeGridComponent, TreeViewComponent];
 
@@ -23,6 +24,7 @@ const MODULES: any[] = [
   NgbDropdownModule,
   NgbDatepickerModule,
   ReactiveFormsModule,
+  BrowserAnimationsModule,
 ];
 
 const PIPES: any[] = [SaveSvgPipe];

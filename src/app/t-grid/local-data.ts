@@ -76,56 +76,6 @@ export const dsTreeView = [
   },
 ];
 
-export const dsTreeView1 = [
-  {
-    name: 'Admin',
-    access: 2,
-    children: [
-      {
-        name: 'Employee',
-        access: 2,
-        children: [
-          {
-            name: 'User',
-            access: 2,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    name: 'HR',
-    access: 1,
-    children: [
-      {
-        name: 'Employee',
-        access: 1,
-        children: [
-          {
-            name: 'User',
-            access: 1,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    name: 'IT',
-    access: 0,
-    children: [],
-  },
-  {
-    name: 'Finance',
-    access: 0,
-    children: [
-      {
-        name: 'Employee',
-        access: 0,
-      },
-    ],
-  },
-];
-
 export const dsTreeGridUser = [
   {
     userId: '56748fb3e3',

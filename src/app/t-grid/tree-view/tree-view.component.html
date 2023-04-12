@@ -51,14 +51,14 @@
         </select>
       </div>
     </div>
-    <ng-container *ngIf="data.expand">
+    <div [@toggleTree]="data.expand">
       <ng-container
         *ngFor="let child of data.children"
         [ngTemplateOutlet]="treeNode"
         [ngTemplateOutletContext]="{ $implicit: child }"
       >
       </ng-container>
-    </ng-container>
+    </div>
   </div>
 </ng-template>
 
