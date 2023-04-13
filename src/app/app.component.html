@@ -1,12 +1,12 @@
 <div class="m-3">
   <div class="container-xl">
-    <core-tree-view
+    <core-data-tree
       #treeview
       [dataSource]="dsTreeView"
       [dataSelect]="dsSelect"
       [expanded]="dsExpanded"
     >
-    </core-tree-view>
+    </core-data-tree>
   </div>
 
   <div *ngFor="let item of treeview.dsPathValue">

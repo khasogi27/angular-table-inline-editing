@@ -1,0 +1,72 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Permissions</h3>
+  </div>
+  <div class="list-group list-group-flush">
+    <ng-container
+      *ngFor="let parent of dsTreeView"
+      [ngTemplateOutlet]="treeNode"
+      [ngTemplateOutletContext]="{ $implicit: parent }"
+    >
+    </ng-container>
+  </div>
+  <ng-template [ngTemplateOutlet]="outletFooter"></ng-template>
+</div>
+
+<ng-template #treeNode let-data>
+  <div class="list-group-item border-0 {{ data['parent'] ? 'pe-3' : 'pe-0' }}">
+    <div class="row align-items-center mb-2">
+      <div
+        class="col-auto px-0"
+        role="button"
+        (click)="data.expand = !data.expand"
+      >
+        <ng-container *ngIf="data.children; else deepChild">
+          <a *ngIf="data.expand" [innerHTML]="dsIcon.chevronDown | saveSvg"></a>
+          <a
+            *ngIf="!data.expand"
+            [innerHTML]="dsIcon.chevronRight | saveSvg"
+          ></a>
+        </ng-container>
+        <ng-template #deepChild>
+          <div>&nbsp; &nbsp;</div>
+        </ng-template>
+      </div>
+      <div class="col text-truncate">
+        <div class="d-block text-muted text-truncate mt-n1">
+          {{ data.name }}
+        </div>
+      </div>
+      <div class="col-auto">
+        <select class="form-select">
+          <ng-template ngFor let-dd [ngForOf]="dsDropdown">
+            <option
+              [value]="dd.value"
+              [selected]="dd.value == data.perm"
+              (click)="onRightClick(data, dd.value)"
+            >
+              {{ dd.perm }}
+            </option>
+          </ng-template>
+        </select>
+      </div>
+    </div>
+    <div [@toggleTree]="data.expand">
+      <ng-container
+        *ngFor="let child of data.children"
+        [ngTemplateOutlet]="treeNode"
+        [ngTemplateOutletContext]="{ $implicit: child }"
+      >
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #outletFooter>
+  <div class="card-footer">
+    <div class="d-flex">
+      <a class="btn btn-ghost-primary me-3" (click)="onSaveClick()">Save</a>
+      <a class="btn btn-link" (click)="onCancelClick()">Cancel</a>
+    </div>
+  </div>
+</ng-template>

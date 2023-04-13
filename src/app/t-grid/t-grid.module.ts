@@ -16,8 +16,14 @@ import {
 import { TreeGridComponent } from './tree-grid/tree-grid.component';
 import { TreeViewComponent } from './tree-view/tree-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DataTreeComponent } from './data-tree/data-tree.component';
 
-const COMPONSNTS: any[] = [GridComponent, TreeGridComponent, TreeViewComponent];
+const COMPONSNTS: any[] = [
+  GridComponent,
+  TreeGridComponent,
+  TreeViewComponent,
+  DataTreeComponent,
+];
 
 const MODULES: any[] = [
   CommonModule,
