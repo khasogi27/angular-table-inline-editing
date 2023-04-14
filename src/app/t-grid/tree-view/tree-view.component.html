@@ -1,0 +1,182 @@
+<!-- <ng-container *ngFor="let child of dataSource">
+  <ul *ngIf="child['parent']" class="nav nav-pills nav-vertical">
+    <ng-container
+      [ngTemplateOutlet]="treeNode"
+      [ngTemplateOutletContext]="{ $implicit: child }"
+    >
+    </ng-container>
+  </ul>
+</ng-container>
+<ng-template #treeNode let-data>
+  <ng-container *ngIf="data['parent'] == undefined; else tempElse">
+    <ul class="nav nav-pills">
+      <ng-template [ngTemplateOutlet]="tempElse"></ng-template>
+    </ul>
+  </ng-container>
+  <ng-template #tempElse>
+    <li class="nav-item">
+      <a class="nav-link" role="button" (click)="data.expand = !data.expand">
+        {{ data.name | titlecase }}
+        <span *ngIf="data.children" class="nav-link-toggle"></span>
+      </a>
+      <div [@toggleTree]="data.expand">
+        <ng-container
+          *ngFor="let child of data.children"
+          [ngTemplateOutlet]="treeNode"
+          [ngTemplateOutletContext]="{ $implicit: child }"
+        >
+        </ng-container>
+      </div>
+    </li>
+  </ng-template>
+</ng-template> -->
+
+<div class="row">
+  <div class="col-3">
+    <div class="card">
+      <!-- <div class="card-header">
+        <h3 class="card-subtitle">Group</h3>
+        <div class="card-actions btn-actions">
+          <a
+            class="btn-action"
+            title="{{ isExpand ? 'Collapse' : 'Expanded' }}"
+            (click)="expandCollapse()"
+          >
+            <svg
+              *ngIf="!isExpand"
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-layout-navbar-expand"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path
+                d="M4 18v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"
+              ></path>
+              <path d="M4 9h16"></path>
+              <path d="M10 14l2 2l2 -2"></path>
+            </svg>
+            <svg
+              *ngIf="isExpand"
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-layout-navbar-collapse"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path
+                d="M4 18v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"
+              ></path>
+              <path d="M4 9h16"></path>
+              <path d="M10 16l2 -2l2 2"></path>
+            </svg>
+          </a>
+          <a class="btn-action" title="View">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-eye"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+              <path
+                d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </div> -->
+      <div class="card-body">
+        <ng-container *ngFor="let child of dataSource">
+          <ul *ngIf="child['parent']" class="nav nav-pills nav-vertical">
+            <ng-container
+              [ngTemplateOutlet]="treeNode"
+              [ngTemplateOutletContext]="{ $implicit: child }"
+            >
+            </ng-container>
+          </ul>
+        </ng-container>
+        <ng-template #treeNode let-data>
+          <ng-container *ngIf="data['parent'] == undefined; else tempElse">
+            <ul class="nav nav-pills">
+              <ng-template [ngTemplateOutlet]="tempElse"></ng-template>
+            </ul>
+          </ng-container>
+          <ng-template #tempElse>
+            <li class="nav-item">
+              <a class="nav-link" role="button">
+                {{ data.name | titlecase }}
+                <span
+                  *ngIf="data.children"
+                  class="nav-link-toggle"
+                  (click)="data.expand = !data.expand"
+                ></span>
+              </a>
+              <div [@toggleTree]="data.expand">
+                <ng-container
+                  *ngFor="let child of data.children"
+                  [ngTemplateOutlet]="treeNode"
+                  [ngTemplateOutletContext]="{ $implicit: child }"
+                >
+                </ng-container>
+              </div>
+            </li>
+          </ng-template>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive table-vcenter table-nowrap">
+          <table class="table table-vcenter w-100">
+            <thead class="custom-thead">
+              <tr>
+                <th class="bg-transparent">User / Group</th>
+                <th class="bg-transparent">Type</th>
+                <th class="bg-transparent">Permission</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Paweł Kuna</td>
+                <td class="text-muted">UI Designer, Training</td>
+                <td class="text-muted">User</td>
+              </tr>
+              <tr>
+                <td>Paweł Kuna</td>
+                <td class="text-muted">UI Designer, Training</td>
+                <td class="text-muted">User</td>
+              </tr>
+              <tr>
+                <td>Paweł Kuna</td>
+                <td class="text-muted">UI Designer, Training</td>
+                <td class="text-muted">User</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

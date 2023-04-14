@@ -31,13 +31,48 @@ export const dsGridUser = [
   },
 ];
 
+export const dsTreeView = [
+  {
+    name: 'master',
+    children: [
+      {
+        name: 'manpower',
+      },
+    ],
+  },
+  {
+    name: 'admin1',
+    children: [
+      {
+        name: 'users1',
+        children: [
+          {
+            name: 'user1',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'admin',
+    children: [
+      {
+        name: 'users',
+      },
+      {
+        name: 'user',
+      },
+    ],
+  },
+];
+
 export const dsPath = [
   '/app/master/manpower#Mixx',
   '/app/admin/users#Full',
   '/app/admin/user#Read',
 ];
 
-export const dsTreeView = [
+export const dsDataTree = [
   {
     name: 'master',
     path: '/app/master/manpower',

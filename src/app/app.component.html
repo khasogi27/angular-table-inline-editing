@@ -1,8 +1,12 @@
 <div class="m-3">
+  <core-tree-view [dataSource]="dsTreeView"></core-tree-view>
+</div>
+
+<!-- <div class="m-3">
   <div class="container-xl">
     <core-data-tree
       #treeview
-      [dataSource]="dsTreeView"
+      [dataSource]="dsDataTree"
       [dataSelect]="dsSelect"
       [expanded]="dsExpanded"
     >
@@ -12,7 +16,7 @@
   <div *ngFor="let item of treeview.dsPathValue">
     <div class="p-2">{{ item | json }}</div>
   </div>
-</div>
+</div> -->
 
 <!-- <div class="container-xl">
   <core-tree-grid

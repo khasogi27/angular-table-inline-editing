@@ -4,6 +4,7 @@ import {
   dsPath,
   dsTreeGridUser,
   dsTreeView,
+  dsDataTree,
 } from './t-grid/local-data';
 // import { BackgroundType, FieldType } from './t-grid/grid/grid.component';
 import {
@@ -28,7 +29,7 @@ interface User {
 export class AppComponent implements OnInit {
   @ViewChild('grid') grid: any;
   @ViewChild('treegrid') treegrid: any;
-  @ViewChild('treeview') treeview: any;
+  @ViewChild('datatree') datatree: any;
 
   public gridField: FieldType[] | any = [
     // {
@@ -162,18 +163,21 @@ export class AppComponent implements OnInit {
   public dsExpanded: boolean = false;
   public dsSelect: any[];
 
+  public dsDataTree: any[];
+
   constructor() {}
 
   ngOnInit(): void {
     this.dsUser = dsGridUser;
     this.dsTreeUser = dsTreeGridUser;
     this.dsTreeView = dsTreeView;
+    this.dsDataTree = dsDataTree;
     this.dsSelect = dsPath;
   }
 
   onSaveClick() {
     // console.log(this.grid.tableValue, '<<< grid');
-    console.log(this.treeview.dsPathValue, '<<< treeview');
+    console.log(this.datatree.dsPathValue, '<<< treeview');
     // this.grid.newData$.subscribe((e) => {
     //   console.log(e, '<<< event');
     //   // this.grid.newData$.complete();
